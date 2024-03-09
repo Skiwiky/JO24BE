@@ -1,5 +1,6 @@
 package com.studi.sapioce.JO24BE.pojo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +13,9 @@ public class DataBank {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column(name = "user_id")
+    private Long userId;
+	
 	private boolean dataSaved;
 	
 	private String nameCard;

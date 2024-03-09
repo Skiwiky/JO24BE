@@ -2,6 +2,7 @@ package com.studi.sapioce.JO24BE.pojo;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,7 +32,10 @@ public class Billet {
 	public long getId() {
 		return id;
 	}
-
+	
+	@Column(name = "user_id")
+    private Long userId;
+	
 	public void setId(long id) {
 		this.id = id;
 	}
