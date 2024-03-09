@@ -25,6 +25,10 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	private String userKey;
+	
+	private String role;
+	
 	private String firstName;
 	
 	private String lastName;
@@ -37,11 +41,15 @@ public class User {
 	
 	private String favouriteSport;
 
-	private String userKey;
-
 	private List<Billet> wallet;
+	
+	private Adress adressFacturation;
+	
+	private Adress adressSending;
+	
+	private DataBank dataBank;
 
-	private String role;
+
 	
 	/**
 	 * @return the id
