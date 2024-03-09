@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.studi.sapioce.JO24BE.pojo.User;
+import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
 import com.studi.sapioce.JO24BE.services.UserService;
 import org.springframework.http.HttpStatus;
 
@@ -63,9 +64,9 @@ public class UserController {
 
     // Supprimer un utilisateur
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable(value = "id") Long userId) {
-    	userService.deleteUser(userId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<ResponseMessage> deleteUser(@PathVariable(value = "id") Long userId) {
+    	   ResponseMessage response = userService.deleteUser(userId);
+    	    return ResponseEntity.ok(response);
     }
     
 }

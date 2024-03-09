@@ -26,7 +26,7 @@ public class UserDetailsImpl implements UserDetails{
 
     public static UserDetails build(User user) {
         return new UserDetailsImpl(
-                user.getUserName(),
+                user.getUsername(),
                 user.getPassword(),
                 null);
     }
