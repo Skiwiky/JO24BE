@@ -2,11 +2,12 @@ package com.studi.sapioce.JO24BE.pojo;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Billet {
@@ -33,8 +34,9 @@ public class Billet {
 		return id;
 	}
 	
-	@Column(name = "user_id")
-    private Long userId;
+	@ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 	
 	public void setId(long id) {
 		this.id = id;

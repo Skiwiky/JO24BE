@@ -1,7 +1,9 @@
 package com.studi.sapioce.JO24BE.security.config;
 
+import org.hibernate.validator.constraints.br.CNPJ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -17,7 +19,7 @@ import com.studi.sapioce.JO24BE.security.jwt.AuthEntryPointJwt;
 import com.studi.sapioce.JO24BE.security.jwt.AuthTokenFilter;
 import com.studi.sapioce.JO24BE.security.service.UserDetailsServiceImpl;
 
-
+@Configuration
 public class WebSecurityConfig {
 	@Autowired
     private UserDetailsServiceImpl userDetailsService;
