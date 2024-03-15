@@ -36,14 +36,14 @@ public class UserService {
 		User userSaved = user;
 
 		// On verifie si l'email est au bon format
-		if (!Utils.estValidFormatString(utils.getFormatEmail(), userSaved.getPassword())) {
+		if (!Utils.estValidFormatString(utils.getFormatEmail(), userSaved.getUsername())) {
 			throw new IllegalArgumentException("Le format de l'email est invalide.");
 		}
 
 		// on verifie si le mdp est au bon format
-		if (!Utils.estValidFormatString(utils.getFormatPassword(), userSaved.getPassword())) {
-			throw new IllegalArgumentException("Le format du mot de passe est invalide.");
-		}
+//		if (!Utils.estValidFormatString(utils.getFormatPassword(), userSaved.getPassword())) {
+//			throw new IllegalArgumentException("Le format du mot de passe est invalide.");
+//		}
 		userSaved.setPassword(passwordEncoder.encode(userSaved.getPassword()));
 		userSaved.setUserKey(passwordEncoder.encode(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-"
 				+ userSaved.getBirthDate() + "-" + Instant.now().toEpochMilli()));

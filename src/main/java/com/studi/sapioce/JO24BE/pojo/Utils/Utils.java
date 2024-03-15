@@ -13,7 +13,7 @@ public class Utils {
 
 	private static final String formatEmail = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
-	private static final String formatPassword = "^(?=.[A-Z])(?=.[a-z])(?=.\\d)(?=.[\\W_]).{12}$";
+	private static final String formatPassword = "^(?=.[A-Z])(?=.[a-z])(?=.\\d)(?=.[\\W_]).{8}$";
 
 	private static final String formatDate = "dd/MM/yyyy";
 
@@ -30,9 +30,13 @@ public class Utils {
 	}
 
 	public static boolean estValidFormatString(String regex, String aVerifier) {
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(aVerifier);
-		return matcher.matches();
+		if(aVerifier == null) {
+			return false;
+		} else {
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(aVerifier);
+			return matcher.matches();
+		}
 	}
 
 	public static boolean estValideFormatDate(String dateTexte) {
