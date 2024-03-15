@@ -49,7 +49,7 @@ public class AuthController {
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
 		// Charger les détails de l'utilisateur à partir de la base de données
-		UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
+		//UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
 		
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -57,39 +57,25 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String jwt = jwtUtils.generateJwToken(authentication);
-		User user = (User) authentication.getPrincipal();
 
-		user = userService.findByUsername(user.getUsername());
+		// Récupérer les détails de l'utilisateur à partir de l'objet Authentication
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-//        mise a vide du pwd
-		user.setPassword(null);
-
-		return ResponseEntity.ok(new JwtResponse(jwt, user));
+        // Retourner la réponse avec le token JWT et les détails de l'utilisateur
+        return ResponseEntity.ok(new JwtResponse(jwt, userDetails));
 
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody User signUpRequest) {
-		if (userService.findUser(signUpRequest.getUsername())) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: le username est deja existant."));
-		}
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User signUpRequest) {
+        if(userService.findUser(signUpRequest.getUsername())){
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: le username est deja existant."));
+        }
 
-		// créer un nouvel User
-		User usersaved = userService.save(signUpRequest);
-		// Charger les détails de l'utilisateur à partir de la base de données
-//				UserDetails userDetails = userDetailsService.loadUserByUsername(usersaved.getUsername());
-		// On connecte l'utilisateur
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(usersaved.getUsername(), null));
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		// Générer le JWT
-		String jwt = jwtUtils.generateJwToken(authentication);
-		usersaved = (User) authentication.getPrincipal();
-
-//        mise a vide du pwd
-		usersaved.setPassword(null);
-
-		return ResponseEntity.ok(new JwtResponse(jwt, usersaved));
-	}
+        //créer un nouvel User
+        userService.save(signUpRequest);
+        return ResponseEntity.ok(new MessageResponse("L'utilisateur est créer!"));
+    }
 }
