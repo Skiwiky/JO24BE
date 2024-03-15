@@ -17,7 +17,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class AuthTokenFilter extends OncePerRequestFilter{
+public class AuthTokenFilter extends OncePerRequestFilter {
 	@Autowired
     private JwtUtils jwtUtils;
 
@@ -27,8 +27,15 @@ public class AuthTokenFilter extends OncePerRequestFilter{
     // j'essaye de contacter l'api spring boot avec un token
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            // recuperation du jwt dans la requete
-
+    	String requestURI = request.getRequestURI();
+        
+        // Vérifie si la demande est pour /auth/signin
+//        if (requestURI.equals("/auth/signin")) {
+//            filterChain.doFilter(request, response); // Permet à la demande de passer sans vérification du jeton JWT
+//            return;
+//        }
+    	
+    	// recuperation du jwt dans la requete
         try{
             //si jwt = null => pas de token
             // si jwt != null => token présent, il faut le verifier
@@ -59,4 +66,5 @@ public class AuthTokenFilter extends OncePerRequestFilter{
         }
         return null;
     }
+
 }

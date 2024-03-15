@@ -126,4 +126,18 @@ public class UserService {
 		return true;
 	}
 
+	public User findByUsername(String username) {
+		// TODO Auto-generated method stub
+		User user = new User();
+		try {
+			user = userRepository.findByUsername(username)
+					.orElseThrow(() -> new EntityNotFoundException("User not found with ID : " + username));
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("Impossible derecupérer l'utilateur " + username + ": " + e);
+		}
+
+		return user;
+	}
+
 }

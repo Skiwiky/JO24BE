@@ -1,10 +1,12 @@
 package com.studi.sapioce.JO24BE.security.payload.response;
 
+import com.studi.sapioce.JO24BE.pojo.User;
+
 public class JwtResponse {
 	
 	   private String token;
 	    private String type = "Bearer";
-	    private String username;
+	    private User user;
 
 	    
 	    
@@ -45,25 +47,32 @@ public class JwtResponse {
 
 
 		/**
-		 * @return the username
+		 * @return the user
 		 */
-		public String getUsername() {
-			return username;
+		public User getUser() {
+			return user;
 		}
 
 
 
 		/**
-		 * @param username the username to set
+		 * @param user the user to set
 		 */
-		public void setUsername(String username) {
-			this.username = username;
+		public void setUser(User user) {
+			this.user = user;
 		}
 
-
-
-		public JwtResponse(String token, String username) {
-	        this.token = token;
-	        this.username = username;
-	    }
+		public JwtResponse(String token, User user) {
+			super();
+			this.token = token;
+			this.user = user;
+		}
+		
+		
 }
+
+
+
+		
+
+
