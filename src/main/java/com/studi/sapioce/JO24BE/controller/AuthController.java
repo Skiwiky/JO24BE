@@ -60,10 +60,13 @@ public class AuthController {
 
 		// Récupérer les détails de l'utilisateur à partir de l'objet Authentication
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
+        User user = userService.findByUsername(userDetails.getUsername());
+        user.setPassword(null);
+        
+        
         // Retourner la réponse avec le token JWT et les détails de l'utilisateur
-        return ResponseEntity.ok(new JwtResponse(jwt, userDetails));
-
+        return ResponseEntity.ok(new JwtResponse(jwt, userDetails, user));
+ 
 	}
 
 	@PostMapping("/signup")
@@ -73,6 +76,7 @@ public class AuthController {
                     .badRequest()
                     .body(new MessageResponse("Error: le username est deja existant."));
         }
+        
 
         //créer un nouvel User
         userService.save(signUpRequest);

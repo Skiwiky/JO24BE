@@ -1,6 +1,8 @@
 package com.studi.sapioce.JO24BE.services;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +49,7 @@ public class UserService {
 		userSaved.setPassword(passwordEncoder.encode(userSaved.getPassword()));
 		userSaved.setUserKey(passwordEncoder.encode(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-"
 				+ userSaved.getBirthDate() + "-" + Instant.now().toEpochMilli()));
+		userSaved.setRole("USER");
 
 		try {
 			userRepository.save(userSaved);
