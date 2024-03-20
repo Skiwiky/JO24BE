@@ -1,5 +1,7 @@
 package com.studi.sapioce.JO24BE.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,8 +9,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -81,5 +85,24 @@ public class AuthController {
         //créer un nouvel User
         userService.save(signUpRequest);
         return ResponseEntity.ok(new MessageResponse("L'utilisateur est créer!"));
+    }
+	
+	// Vérifier si le token expire bientôt
+    @GetMapping("/isTokenExpiringSoon")
+    public ResponseEntity<Boolean> isTokenExpiringSoon(@RequestHeader("Authorization") String token) {
+        token = token.substring(7); // Enlever "Bearer "
+        return ResponseEntity.ok(jwtUtils.isTokenExpiringSoon(token));
+    }
+
+    // Renouveler le token
+    @PostMapping("/refreshToken")
+    public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String oldToken) {
+        oldToken = oldToken.substring(7); // Enlever "Bearer "
+        String username = jwtUtils.getUserNameFromJwToken(oldToken);
+        User user = userService.findByUsername(username);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, user.getPassword()));
+        String newToken = jwtUtils.generateJwToken(authentication);
+        return ResponseEntity.ok(newToken);
     }
 }

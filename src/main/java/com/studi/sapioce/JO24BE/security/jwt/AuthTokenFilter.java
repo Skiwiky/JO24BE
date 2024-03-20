@@ -29,12 +29,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     	String requestURI = request.getRequestURI();
         
-        // Vérifie si la demande est pour /auth/signin
-//        if (requestURI.equals("/auth/signin")) {
-//            filterChain.doFilter(request, response); // Permet à la demande de passer sans vérification du jeton JWT
-//            return;
-//        }
-    	
     	// recuperation du jwt dans la requete
         try{
             //si jwt = null => pas de token

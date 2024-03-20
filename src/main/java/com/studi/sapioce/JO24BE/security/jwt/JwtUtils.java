@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import com.studi.sapioce.JO24BE.security.service.UserDetailsImpl;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -64,5 +66,17 @@ public class JwtUtils {
 
     private Key key(){
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+    }
+    
+    /**
+     * Permet de verifier Si le token est expiré bientot
+     * @param token
+     * @return 
+     */
+    public boolean isTokenExpiringSoon(String token) {
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(jwtSecret.getBytes()).build().parseClaimsJws(token);
+        Date expirationDate = claims.getBody().getExpiration();
+        long diff = expirationDate.getTime() - (new Date()).getTime();
+        return diff <=(long) this.expiration;
     }
 }
