@@ -97,9 +97,20 @@ public class UserService {
 			// TODO: handle exception
 			logger.error("Impossible derecupérer l'utilateur " + userId + ": " + e);
 		}
-		userUpdated = user;
+
+
+		userToUserUpdated(user, userUpdated);
+		
+		try {
+			userRepository.save(userUpdated);
+			logger.info("L'utilsateur a bien été mise a jour.");
+		} catch (Exception e) {
+			logger.error("L'utilisateur n'a pas put etre mise a jour: " + e);
+		}
+
 		return userUpdated;
 	}
+
 
 	public ResponseMessage deleteUser(Long userId) {
 		// TODO Auto-generated method stub
@@ -142,5 +153,25 @@ public class UserService {
 
 		return user;
 	}
+	
+	private void userToUserUpdated(User user, User userUpdated) {
+		if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+			userUpdated.setPassword(user.getPassword());
+	    }
 
+	    if (user.getFirstName() != null) userUpdated.setFirstName(user.getFirstName());
+	    if (user.getLastName() != null) userUpdated.setLastName(user.getLastName());
+	    if (user.getUsername() != null) userUpdated.setUsername(user.getUsername());
+	    if (user.getBirthDate() != null) userUpdated.setBirthDate(user.getBirthDate());
+	    if (user.getFavouriteSport() != null) userUpdated.setFavouriteSport(user.getFavouriteSport());
+	    
+	    if (user.getAdressFacturation() != null) {
+	    	userUpdated.getAdressFacturation().setUser(userUpdated);
+	    }
+	    if (user.getDataBank() != null) {
+	    	userUpdated.getDataBank().setUser(userUpdated);
+	    }
+	    
+	}
+	
 }

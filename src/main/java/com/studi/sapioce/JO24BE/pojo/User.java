@@ -30,33 +30,29 @@ public class User {
 	private long id;
 
 	private String userKey;
-	
+
 	private String role;
-	
+
 	private String firstName;
-	
+
 	private String lastName;
-	
+
 	private String username;
-	
+
 	private String password;
-	
+
 	private Date birthDate;
-	
+
 	private String favouriteSport;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Billet> wallet;
-	
-	@OneToOne(cascade = CascadeType.ALL)
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	@JoinColumn(name = "facturation_adress_id", referencedColumnName = "id")
 	private Adress adressFacturation;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "sending_adress_id", referencedColumnName = "id")
-	private Adress adressSending;
-	
-	@OneToOne(cascade = CascadeType.ALL)
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	@JoinColumn(name = "data_bank_id", referencedColumnName = "id")
 	private DataBank dataBank;
 
@@ -148,14 +144,6 @@ public class User {
 		this.adressFacturation = adressFacturation;
 	}
 
-	public Adress getAdressSending() {
-		return adressSending;
-	}
-
-	public void setAdressSending(Adress adressSending) {
-		this.adressSending = adressSending;
-	}
-
 	public DataBank getDataBank() {
 		return dataBank;
 	}
@@ -170,7 +158,7 @@ public class User {
 
 	public User(long id, String userKey, String role, String firstName, String lastName, String username,
 			String password, Date birthDate, String favouriteSport, List<Billet> wallet, Adress adressFacturation,
-			Adress adressSending, DataBank dataBank) {
+			DataBank dataBank) {
 		super();
 		this.id = id;
 		this.userKey = userKey;
@@ -183,8 +171,7 @@ public class User {
 		this.favouriteSport = favouriteSport;
 		this.wallet = wallet;
 		this.adressFacturation = adressFacturation;
-		this.adressSending = adressSending;
 		this.dataBank = dataBank;
 	}
-	
+
 }
