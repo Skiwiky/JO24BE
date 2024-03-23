@@ -98,6 +98,11 @@ public class Billet {
 		this.categoryBillet = categoryBillet;
 	}
 
+	
+	public Billet() {
+		super();
+	}
+
 	public Billet(long id, String sport, String localisation, Date date, String billetKey, String finalKey, float price,
 			String categoryBillet) {
 		super();
