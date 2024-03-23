@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
@@ -34,6 +35,7 @@ public class UserService {
 	@Autowired
 	Utils utils;
 
+	@Transactional
 	public User save(User user) {
 		User userSaved = user;
 
@@ -81,12 +83,13 @@ public class UserService {
 					.orElseThrow(() -> new EntityNotFoundException("User not found with ID : " + userId));
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("Impossible derecupérer l'utilateur " + userId + ": " + e);
+			logger.error("Impossible de recupérer l'utilateur " + userId + ": " + e);
 		}
 
 		return user;
 	}
-
+	
+	@Transactional
 	public User updateUser(Long userId, User user) {
 		// TODO Auto-generated method stub
 		User userUpdated = new User();
@@ -111,7 +114,7 @@ public class UserService {
 		return userUpdated;
 	}
 
-
+	@Transactional
 	public ResponseMessage deleteUser(Long userId) {
 		// TODO Auto-generated method stub
 		// On verifie si l'utilisateur exist
