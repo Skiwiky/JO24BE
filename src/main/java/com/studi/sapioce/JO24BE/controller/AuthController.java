@@ -2,6 +2,8 @@ package com.studi.sapioce.JO24BE.controller;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +35,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("auth")
 public class AuthController {
+	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -45,7 +48,7 @@ public class AuthController {
 
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
 
@@ -53,8 +56,9 @@ public class AuthController {
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
 		// Charger les détails de l'utilisateur à partir de la base de données
-		//UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
-		
+		// UserDetails userDetails =
+		// userDetailsService.loadUserByUsername(loginRequest.getUsername());
+
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -63,46 +67,44 @@ public class AuthController {
 		String jwt = jwtUtils.generateJwToken(authentication);
 
 		// Récupérer les détails de l'utilisateur à partir de l'objet Authentication
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername());
-        user.setPassword(null);
-        
-        
-        // Retourner la réponse avec le token JWT et les détails de l'utilisateur
-        return ResponseEntity.ok(new JwtResponse(jwt, userDetails, user));
- 
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		User user = userService.findByUsername(userDetails.getUsername());
+		user.setPassword(null);
+
+		JwtResponse jwtResponse = new JwtResponse(jwt, userDetails, user);
+		logger.info("Réponse JWT: {}", jwtResponse); 
+
+		return ResponseEntity.ok(jwtResponse);
+
 	}
 
 	@PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User signUpRequest) {
-        if(userService.findUser(signUpRequest.getUsername())){
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: le username est deja existant."));
-        }
-        
+	public ResponseEntity<?> registerUser(@Valid @RequestBody User signUpRequest) {
+		if (userService.findUser(signUpRequest.getUsername())) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: le username est deja existant."));
+		}
 
-        //créer un nouvel User
-        userService.save(signUpRequest);
-        return ResponseEntity.ok(new MessageResponse("L'utilisateur est créer!"));
-    }
-	
+		// créer un nouvel User
+		userService.save(signUpRequest);
+		return ResponseEntity.ok(new MessageResponse("L'utilisateur est créer!"));
+	}
+
 	// Vérifier si le token expire bientôt
-    @GetMapping("/isTokenExpiringSoon")
-    public ResponseEntity<Boolean> isTokenExpiringSoon(@RequestHeader("Authorization") String token) {
-        token = token.substring(7); // Enlever "Bearer "
-        return ResponseEntity.ok(jwtUtils.isTokenExpiringSoon(token));
-    }
+	@GetMapping("/isTokenExpiringSoon")
+	public ResponseEntity<Boolean> isTokenExpiringSoon(@RequestHeader("Authorization") String token) {
+		token = token.substring(7); // Enlever "Bearer "
+		return ResponseEntity.ok(jwtUtils.isTokenExpiringSoon(token));
+	}
 
-    // Renouveler le token
-    @PostMapping("/refreshToken")
-    public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String oldToken) {
-        oldToken = oldToken.substring(7); // Enlever "Bearer "
-        String username = jwtUtils.getUserNameFromJwToken(oldToken);
-        User user = userService.findByUsername(username);
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, user.getPassword()));
-        String newToken = jwtUtils.generateJwToken(authentication);
-        return ResponseEntity.ok(newToken);
-    }
+	// Renouveler le token
+	@PostMapping("/refreshToken")
+	public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String oldToken) {
+		oldToken = oldToken.substring(7); // Enlever "Bearer "
+		String username = jwtUtils.getUserNameFromJwToken(oldToken);
+		User user = userService.findByUsername(username);
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(username, user.getPassword()));
+		String newToken = jwtUtils.generateJwToken(authentication);
+		return ResponseEntity.ok(newToken);
+	}
 }
