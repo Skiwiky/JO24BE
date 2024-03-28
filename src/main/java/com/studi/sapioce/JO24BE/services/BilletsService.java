@@ -2,6 +2,7 @@ package com.studi.sapioce.JO24BE.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.studi.sapioce.JO24BE.pojo.Billet;
+import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
 import com.studi.sapioce.JO24BE.repository.BilletsRepository;
+import com.studi.sapioce.JO24BE.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -20,6 +23,9 @@ public class BilletsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
+	@Autowired
+	private UserRepository userRepository;
+	
 	@Autowired
 	private BilletsRepository billetRepository;
 
@@ -57,10 +63,9 @@ public class BilletsService {
 	}
 
 	@Transactional
-	public Billet save(Billet billet) {
+	public Billet save(Long idUser,Billet billet) {
 		Billet billetSaved = new Billet();
-		// TODO AJOUTER LES CREATIONS DES CLES
-		// voir si je dois passer l'id en paramètre.
+		User user = userRepository.findById(idUser)
 
 		try {
 			billetSaved = billetRepository.save(billet);

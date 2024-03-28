@@ -45,9 +45,9 @@ public class BilletsController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Billet> createBillet(@RequestBody Billet billet) {
+	public ResponseEntity<Billet> createBillet(@PathVariable Long idUser, @RequestBody Billet billet) {
 		Billet billetCreated = new Billet();
-		billetCreated= billetService.save(billet);
+		billetCreated= billetService.save(idUser, billet);
 		return new ResponseEntity<>(billetCreated, HttpStatus.CREATED);
 	}
 

@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.studi.sapioce.JO24BE.pojo.Adress;
 import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
 import com.studi.sapioce.JO24BE.pojo.Utils.Utils;
@@ -169,7 +170,20 @@ public class UserService {
 	    if (user.getFavouriteSport() != null) userUpdated.setFavouriteSport(user.getFavouriteSport());
 	    
 	    if (user.getAdressFacturation() != null) {
-	    	userUpdated.getAdressFacturation().setUser(userUpdated);
+	       
+	        if ( userUpdated.getAdressFacturation() == null) {
+	            // Si userUpdated n'a pas encore d'adresse
+	            userUpdated.setAdressFacturation(user.getAdressFacturation());
+	            userUpdated.setAdressFacturation(userUpdated.getAdressFacturation());
+	            userUpdated.getAdressFacturation().setUser(userUpdated); // Assurez-vous que la relation bidirectionnelle est correctement établie
+	        } else {
+	            // Si userUpdated a déjà une adresse
+	        	userUpdated.getAdressFacturation().setStreet(user.getAdressFacturation().getStreet());
+	        	userUpdated.getAdressFacturation().setComplement(user.getAdressFacturation().getComplement());
+	        	userUpdated.getAdressFacturation().setZipCode(user.getAdressFacturation().getZipCode());
+	        	userUpdated.getAdressFacturation().setCity(user.getAdressFacturation().getCity());
+	        	userUpdated.getAdressFacturation().setState(user.getAdressFacturation().getState());
+	        }
 	    }
 	    if (user.getDataBank() != null) {
 	    	userUpdated.getDataBank().setUser(userUpdated);
