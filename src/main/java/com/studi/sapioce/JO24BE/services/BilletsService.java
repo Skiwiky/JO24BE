@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,10 @@ public class BilletsService {
 	
 	@Autowired
 	private BilletsRepository billetRepository;
+	
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	/**
 	 * Permer de retourner l'ensembles des billets achetés.
@@ -62,11 +67,22 @@ public class BilletsService {
 		return billet;
 	}
 
+	/**
+	 * Permet d'enregistrer 
+	 * @param idUser
+	 * @param billet
+	 * @return
+	 */
 	@Transactional
 	public Billet save(Long idUser,Billet billet) {
 		Billet billetSaved = new Billet();
-		User user = userRepository.findById(idUser)
+		
+		//TODO a deplacer dans le service de reservation, au moment du paiment
+		Optional<User> userOptional = userRepository.findById(idUser);
+	    User user = userOptional.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'id " + idUser));
 
+	    String billetKey = passwordEncoder.encode(billet.getSport()+ billet.getDate()+billet.getLocalisation()+billet.getPrice() );
+	    billet.setBilletKey(billetKey);
 		try {
 			billetSaved = billetRepository.save(billet);
 		} catch (Exception e) {

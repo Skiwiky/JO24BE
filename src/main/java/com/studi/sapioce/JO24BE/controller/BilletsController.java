@@ -56,7 +56,7 @@ public class BilletsController {
 		billet.setId(id);
 		Billet billetUpdated = new Billet();
 
-		billetUpdated = billetService.save(billet);
+		billetUpdated = billetService.save(id, billet);
 		if(billetUpdated !=null) {
 			return new ResponseEntity<Billet>(billetUpdated, HttpStatus.OK);
 		} else {
