@@ -1,11 +1,8 @@
 package com.studi.sapioce.JO24BE.services;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.studi.sapioce.JO24BE.pojo.Adress;
 import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
 import com.studi.sapioce.JO24BE.pojo.Utils.Utils;
@@ -65,7 +61,6 @@ public class UserService {
 	}
 
 	public List<User> getAllUser() {
-		// TODO Auto-generated method stub
 		List<User> userList = new ArrayList<User>();
 		try {
 			userList = userRepository.findAll();
@@ -77,8 +72,7 @@ public class UserService {
 	}
 
 	public User getUserById(Long userId) {
-		// TODO Auto-generated method stub
-		User user = new User();
+				User user = new User();
 		try {
 			user = userRepository.findById(userId)
 					.orElseThrow(() -> new EntityNotFoundException("User not found with ID : " + userId));
@@ -92,7 +86,6 @@ public class UserService {
 	
 	@Transactional
 	public User updateUser(Long userId, User user) {
-		// TODO Auto-generated method stub
 		User userUpdated = new User();
 		try {
 			userUpdated = userRepository.findById(userId)
@@ -175,7 +168,7 @@ public class UserService {
 	            // Si userUpdated n'a pas encore d'adresse
 	            userUpdated.setAdressFacturation(user.getAdressFacturation());
 	            userUpdated.setAdressFacturation(userUpdated.getAdressFacturation());
-	            userUpdated.getAdressFacturation().setUser(userUpdated); // Assurez-vous que la relation bidirectionnelle est correctement établie
+	            userUpdated.getAdressFacturation().setUser(userUpdated); 
 	        } else {
 	            // Si userUpdated a déjà une adresse
 	        	userUpdated.getAdressFacturation().setStreet(user.getAdressFacturation().getStreet());

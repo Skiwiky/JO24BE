@@ -1,6 +1,5 @@
 package com.studi.sapioce.JO24BE.pojo;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
