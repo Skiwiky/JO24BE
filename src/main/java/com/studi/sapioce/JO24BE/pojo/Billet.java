@@ -1,5 +1,6 @@
 package com.studi.sapioce.JO24BE.pojo;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ public class Billet {
 	
 	private String localisation;
 	
-	private Date date;
+	private LocalDate date;
 	
 	private String billetKey;
 	
@@ -58,11 +59,11 @@ public class Billet {
 		this.localisation = localisation;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
@@ -103,7 +104,7 @@ public class Billet {
 		super();
 	}
 
-	public Billet(long id, String sport, String localisation, Date date, String billetKey, String finalKey, float price,
+	public Billet(long id, String sport, String localisation, LocalDate date, String billetKey, String finalKey, float price,
 			String categoryBillet) {
 		super();
 		this.id = id;

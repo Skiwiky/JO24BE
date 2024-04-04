@@ -31,8 +31,7 @@ public class BilletsService {
 	private BilletsRepository billetRepository;
 	
 
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+	
 
 	/**
 	 * Permer de retourner l'ensembles des billets achetés.
@@ -81,8 +80,7 @@ public class BilletsService {
 		Optional<User> userOptional = userRepository.findById(idUser);
 	    User user = userOptional.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'id " + idUser));
 
-	    String billetKey = passwordEncoder.encode(billet.getSport()+ billet.getDate()+billet.getLocalisation()+billet.getPrice() );
-	    billet.setBilletKey(billetKey);
+	  
 		try {
 			billetSaved = billetRepository.save(billet);
 		} catch (Exception e) {
