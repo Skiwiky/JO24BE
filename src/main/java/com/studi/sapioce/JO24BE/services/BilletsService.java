@@ -76,11 +76,6 @@ public class BilletsService {
 	public Billet save(Long idUser,Billet billet) {
 		Billet billetSaved = new Billet();
 		
-		//TODO a deplacer dans le service de reservation, au moment du paiment
-		Optional<User> userOptional = userRepository.findById(idUser);
-	    User user = userOptional.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'id " + idUser));
-
-	  
 		try {
 			billetSaved = billetRepository.save(billet);
 		} catch (Exception e) {

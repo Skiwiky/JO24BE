@@ -50,7 +50,8 @@ public class UserService {
 //			throw new IllegalArgumentException("Le format du mot de passe est invalide.");
 //		}
 		userSaved.setPassword(passwordEncoder.encode(userSaved.getPassword()));
-		userSaved.setUserKey(passwordEncoder.encode(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-" + Instant.now().toEpochMilli()));
+		userSaved.setUserKey(passwordEncoder
+				.encode(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-" + Instant.now().toEpochMilli()));
 		userSaved.setRole("USER");
 
 		try {
@@ -64,7 +65,6 @@ public class UserService {
 	}
 
 	public List<User> getAllUser() {
-		// TODO Auto-generated method stub
 		List<User> userList = new ArrayList<User>();
 		try {
 			userList = userRepository.findAll();
@@ -76,19 +76,17 @@ public class UserService {
 	}
 
 	public User getUserById(Long userId) {
-		// TODO Auto-generated method stub
 		User user = new User();
 		try {
 			user = userRepository.findById(userId)
 					.orElseThrow(() -> new EntityNotFoundException("User not found with ID : " + userId));
 		} catch (Exception e) {
-			// TODO: handle exception
 			logger.error("Impossible de recupérer l'utilateur " + userId + ": " + e);
 		}
 
 		return user;
 	}
-	
+
 	@Transactional
 	public User updateUser(Long userId, User user) {
 		// TODO Auto-generated method stub
@@ -101,9 +99,8 @@ public class UserService {
 			logger.error("Impossible derecupérer l'utilateur " + userId + ": " + e);
 		}
 
-
 		userToUserUpdated(user, userUpdated);
-		
+
 		try {
 			userRepository.save(userUpdated);
 			logger.info("L'utilsateur a bien été mise a jour.");
@@ -116,7 +113,6 @@ public class UserService {
 
 	@Transactional
 	public ResponseMessage deleteUser(Long userId) {
-		// TODO Auto-generated method stub
 		// On verifie si l'utilisateur exist
 		if (!userRepository.existsById(userId)) {
 			return new ResponseMessage("Utilisateur non trouvé avec l'ID : " + userId);
@@ -132,7 +128,6 @@ public class UserService {
 
 	// On verifie si le mail est deja utilisé pour un autre utilisateur
 	public boolean findUser(String email) {
-		// TODO Auto-generated method stub
 		// verifie et recupere le User a partir du mail
 		if (!Utils.estValidFormatString(utils.getFormatEmail(), email)) {
 			throw new IllegalArgumentException("Le format de l'email est invalide.");
@@ -144,33 +139,38 @@ public class UserService {
 	}
 
 	public User findByUsername(String username) {
-		// TODO Auto-generated method stub
 		User user = new User();
 		try {
 			user = userRepository.findByUsername(username)
 					.orElseThrow(() -> new EntityNotFoundException("User not found with ID : " + username));
 		} catch (Exception e) {
-			// TODO: handle exception
 			logger.error("Impossible derecupérer l'utilateur " + username + ": " + e);
 		}
 
 		return user;
 	}
-	
+
 	private void userToUserUpdated(User user, User userUpdated) {
 		if (user.getPassword() != null && !user.getPassword().isEmpty()) {
 			userUpdated.setPassword(user.getPassword());
-	    }
+		}
 
-	    if (user.getFirstName() != null) userUpdated.setFirstName(user.getFirstName());
-	    if (user.getLastName() != null) userUpdated.setLastName(user.getLastName());
-	    if (user.getUsername() != null) userUpdated.setUsername(user.getUsername());
-	    
-	    
-	    if (user.getDataBanks() != null) {
-//TODO Mettre a jour les données bancaire
-	    }
-	    
+		if (user.getFirstName() != null)
+			userUpdated.setFirstName(user.getFirstName());
+		if (user.getLastName() != null)
+			userUpdated.setLastName(user.getLastName());
+		if (user.getUsername() != null)
+			userUpdated.setUsername(user.getUsername());
+
+		if (user.getDataBanks() != null && user.getDataBanks().isDataSaved() == true) {
+			//TODO Mettre a jour les données bancaire
+			userUpdated.getDataBanks().setNumberCard(user.getDataBanks().getNumberCard());
+			userUpdated.getDataBanks().setNameCard(user.getDataBanks().getNameCard());
+			userUpdated.getDataBanks().setDateClosed(user.getDataBanks().getDateClosed());
+			userUpdated.getDataBanks().setCvv(user.getDataBanks().getCvv());
+
+		}
+
 	}
-	
+
 }

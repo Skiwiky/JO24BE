@@ -36,14 +36,14 @@ public class User {
 	private Set<Reservation> reservations;
 
 	@OneToMany(mappedBy = "user")
-	private Set<DataBank> dataBanks;
+	private DataBank dataBanks;
 
 	public User() {
 		super();
 	}
 
 	public User(Long id, String firstName, String lastName, String username, String password, String userKey,
-			String role, Set<Reservation> reservations, Set<DataBank> dataBanks) {
+			String role, Set<Reservation> reservations, DataBank dataBanks) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -157,14 +157,14 @@ public class User {
 	/**
 	 * @return the dataBanks
 	 */
-	public Set<DataBank> getDataBanks() {
+	public DataBank getDataBanks() {
 		return dataBanks;
 	}
 
 	/**
 	 * @param dataBanks the dataBanks to set
 	 */
-	public void setDataBanks(Set<DataBank> dataBanks) {
+	public void setDataBanks(DataBank dataBanks) {
 		this.dataBanks = dataBanks;
 	}
 
