@@ -16,96 +16,31 @@ public class Billet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
 	private String sport;
-	
+
 	private String localisation;
-	
+
 	private LocalDate date;
-	
+
 	private String billetKey;
-	
+
 	private String finalKey;
-	
+
 	private float price;
 
 	private String categoryBillet;
 
-	public long getId() {
-		return id;
-	}
-	
 	@ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
-	
-	public void setId(long id) {
-		this.id = id;
-	}
+	@JoinColumn(name = "reservation_id")
+	private Reservation reservation;
 
-	public String getSport() {
-		return sport;
-	}
-
-	public void setSport(String sport) {
-		this.sport = sport;
-	}
-
-	public String getLocalisation() {
-		return localisation;
-	}
-
-	public void setLocalisation(String localisation) {
-		this.localisation = localisation;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public String getBilletKey() {
-		return billetKey;
-	}
-
-	public void setBilletKey(String billetKey) {
-		this.billetKey = billetKey;
-	}
-
-	public String getFinalKey() {
-		return finalKey;
-	}
-
-	public void setFinalKey(String finalKey) {
-		this.finalKey = finalKey;
-	}
-
-	public float getPrice() {
-		return price;
-	}
-
-	public void setPrice(float price) {
-		this.price = price;
-	}
-
-	public String getCategoryBillet() {
-		return categoryBillet;
-	}
-
-	public void setCategoryBillet(String categoryBillet) {
-		this.categoryBillet = categoryBillet;
-	}
-
-	
 	public Billet() {
 		super();
 	}
 
-	public Billet(long id, String sport, String localisation, LocalDate date, String billetKey, String finalKey, float price,
-			String categoryBillet) {
+	public Billet(long id, String sport, String localisation, LocalDate date, String billetKey, String finalKey,
+			float price, String categoryBillet, Reservation reservation) {
 		super();
 		this.id = id;
 		this.sport = sport;
@@ -115,7 +50,133 @@ public class Billet {
 		this.finalKey = finalKey;
 		this.price = price;
 		this.categoryBillet = categoryBillet;
+		this.reservation = reservation;
 	}
-	
-	
+
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the sport
+	 */
+	public String getSport() {
+		return sport;
+	}
+
+	/**
+	 * @param sport the sport to set
+	 */
+	public void setSport(String sport) {
+		this.sport = sport;
+	}
+
+	/**
+	 * @return the localisation
+	 */
+	public String getLocalisation() {
+		return localisation;
+	}
+
+	/**
+	 * @param localisation the localisation to set
+	 */
+	public void setLocalisation(String localisation) {
+		this.localisation = localisation;
+	}
+
+	/**
+	 * @return the date
+	 */
+	public LocalDate getDate() {
+		return date;
+	}
+
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	/**
+	 * @return the billetKey
+	 */
+	public String getBilletKey() {
+		return billetKey;
+	}
+
+	/**
+	 * @param billetKey the billetKey to set
+	 */
+	public void setBilletKey(String billetKey) {
+		this.billetKey = billetKey;
+	}
+
+	/**
+	 * @return the finalKey
+	 */
+	public String getFinalKey() {
+		return finalKey;
+	}
+
+	/**
+	 * @param finalKey the finalKey to set
+	 */
+	public void setFinalKey(String finalKey) {
+		this.finalKey = finalKey;
+	}
+
+	/**
+	 * @return the price
+	 */
+	public float getPrice() {
+		return price;
+	}
+
+	/**
+	 * @param price the price to set
+	 */
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
+	/**
+	 * @return the categoryBillet
+	 */
+	public String getCategoryBillet() {
+		return categoryBillet;
+	}
+
+	/**
+	 * @param categoryBillet the categoryBillet to set
+	 */
+	public void setCategoryBillet(String categoryBillet) {
+		this.categoryBillet = categoryBillet;
+	}
+
+	/**
+	 * @return the reservation
+	 */
+	public Reservation getReservation() {
+		return reservation;
+	}
+
+	/**
+	 * @param reservation the reservation to set
+	 */
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
+	}
+
 }

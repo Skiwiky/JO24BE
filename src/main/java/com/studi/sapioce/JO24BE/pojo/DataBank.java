@@ -10,23 +10,23 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class DataBank {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
+	
 	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JoinColumn(name = "user_id")
 	private User user;
-	
+
 	private boolean dataSaved;
-	
+
 	private String nameCard;
-	
+
 	private String numberCard;
-	
-	private String keyCard;
-	
+
+	private String cvv;
+
 	private String dateClosed;
 
 	/**
@@ -102,15 +102,15 @@ public class DataBank {
 	/**
 	 * @return the keyCard
 	 */
-	public String getKeyCard() {
-		return keyCard;
+	public String getCvv() {
+		return cvv;
 	}
 
 	/**
 	 * @param keyCard the keyCard to set
 	 */
-	public void setKeyCard(String keyCard) {
-		this.keyCard = keyCard;
+	public void setCvv(String cvv) {
+		this.cvv = cvv;
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class DataBank {
 		super();
 	}
 
-	public DataBank(long id, User user, boolean dataSaved, String nameCard, String numberCard, String keyCard,
+	public DataBank(long id, User user, boolean dataSaved, String nameCard, String numberCard, String cvv,
 			String dateClosed) {
 		super();
 		this.id = id;
@@ -139,11 +139,8 @@ public class DataBank {
 		this.dataSaved = dataSaved;
 		this.nameCard = nameCard;
 		this.numberCard = numberCard;
-		this.keyCard = keyCard;
+		this.cvv = cvv;
 		this.dateClosed = dateClosed;
 	}
-
-	
-	
 
 }

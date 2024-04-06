@@ -53,7 +53,6 @@ public class UserServiceTest {
 	        user.setPassword("password");
 	        user.setFirstName("Test");
 	        user.setLastName("User");
-	        user.setBirthDate(new Date());
 
 	        when(utils.getFormatEmail()).thenReturn(".+@.+\\..+");
 	        //when(utils.estValidFormatString(anyString(), anyString())).thenReturn(true);

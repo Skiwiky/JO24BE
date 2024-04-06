@@ -50,8 +50,7 @@ public class UserService {
 //			throw new IllegalArgumentException("Le format du mot de passe est invalide.");
 //		}
 		userSaved.setPassword(passwordEncoder.encode(userSaved.getPassword()));
-		userSaved.setUserKey(passwordEncoder.encode(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-"
-				+ userSaved.getBirthDate() + "-" + Instant.now().toEpochMilli()));
+		userSaved.setUserKey(passwordEncoder.encode(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-" + Instant.now().toEpochMilli()));
 		userSaved.setRole("USER");
 
 		try {
@@ -166,27 +165,10 @@ public class UserService {
 	    if (user.getFirstName() != null) userUpdated.setFirstName(user.getFirstName());
 	    if (user.getLastName() != null) userUpdated.setLastName(user.getLastName());
 	    if (user.getUsername() != null) userUpdated.setUsername(user.getUsername());
-	    if (user.getBirthDate() != null) userUpdated.setBirthDate(user.getBirthDate());
-	    if (user.getFavouriteSport() != null) userUpdated.setFavouriteSport(user.getFavouriteSport());
 	    
-	    if (user.getAdressFacturation() != null) {
-	       
-	        if ( userUpdated.getAdressFacturation() == null) {
-	            // Si userUpdated n'a pas encore d'adresse
-	            userUpdated.setAdressFacturation(user.getAdressFacturation());
-	            userUpdated.setAdressFacturation(userUpdated.getAdressFacturation());
-	            userUpdated.getAdressFacturation().setUser(userUpdated); // Assurez-vous que la relation bidirectionnelle est correctement établie
-	        } else {
-	            // Si userUpdated a déjà une adresse
-	        	userUpdated.getAdressFacturation().setStreet(user.getAdressFacturation().getStreet());
-	        	userUpdated.getAdressFacturation().setComplement(user.getAdressFacturation().getComplement());
-	        	userUpdated.getAdressFacturation().setZipCode(user.getAdressFacturation().getZipCode());
-	        	userUpdated.getAdressFacturation().setCity(user.getAdressFacturation().getCity());
-	        	userUpdated.getAdressFacturation().setState(user.getAdressFacturation().getState());
-	        }
-	    }
-	    if (user.getDataBank() != null) {
-	    	userUpdated.getDataBank().setUser(userUpdated);
+	    
+	    if (user.getDataBanks() != null) {
+//TODO Mettre a jour les données bancaire
 	    }
 	    
 	}

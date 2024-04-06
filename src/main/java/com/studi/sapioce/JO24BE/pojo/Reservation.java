@@ -1,14 +1,16 @@
 package com.studi.sapioce.JO24BE.pojo;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Reservation {
@@ -17,17 +19,29 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	private long idUser;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
-	private List<Billet> billets;
-	
-	private double totalPrix;
-
-	private DataBank datatBank;
+	@OneToMany(mappedBy = "reservation")
+	private Set<Billet> tickets;
 
 	private LocalDateTime dateReservation;
 
 	private boolean isAcheter;
+
+	public Reservation() {
+		super();
+	}
+
+	public Reservation(long id, User user, Set<Billet> tickets, LocalDateTime dateReservation, boolean isAcheter) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.tickets = tickets;
+		this.dateReservation = dateReservation;
+		this.isAcheter = isAcheter;
+	}
 
 	/**
 	 * @return the id
@@ -44,59 +58,31 @@ public class Reservation {
 	}
 
 	/**
-	 * @return the idUser
+	 * @return the user
 	 */
-	public long getIdUser() {
-		return idUser;
+	public User getUser() {
+		return user;
 	}
 
 	/**
-	 * @param idUser the idUser to set
+	 * @param user the user to set
 	 */
-	public void setIdUser(long idUser) {
-		this.idUser = idUser;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	/**
-	 * @return the billets
+	 * @return the tickets
 	 */
-	public List<Billet> getBillets() {
-		return billets;
+	public Set<Billet> getTickets() {
+		return tickets;
 	}
 
 	/**
-	 * @param billets the billets to set
+	 * @param tickets the tickets to set
 	 */
-	public void setBillets(List<Billet> billets) {
-		this.billets = billets;
-	}
-
-	/**
-	 * @return the totalPrix
-	 */
-	public double getTotalPrix() {
-		return totalPrix;
-	}
-
-	/**
-	 * @param totalPrix the totalPrix to set
-	 */
-	public void setTotalPrix(double totalPrix) {
-		this.totalPrix = totalPrix;
-	}
-
-	/**
-	 * @return the datatBank
-	 */
-	public DataBank getDatatBank() {
-		return datatBank;
-	}
-
-	/**
-	 * @param datatBank the datatBank to set
-	 */
-	public void setDatatBank(DataBank datatBank) {
-		this.datatBank = datatBank;
+	public void setTickets(Set<Billet> tickets) {
+		this.tickets = tickets;
 	}
 
 	/**
@@ -127,21 +113,4 @@ public class Reservation {
 		this.isAcheter = isAcheter;
 	}
 
-	public Reservation() {
-		super();
-	}
-
-	public Reservation(long id, long idUser, List<Billet> billets, double totalPrix, DataBank datatBank,
-			LocalDateTime dateReservation, boolean isAcheter) {
-		super();
-		this.id = id;
-		this.idUser = idUser;
-		this.billets = billets;
-		this.totalPrix = totalPrix;
-		this.datatBank = datatBank;
-		this.dateReservation = dateReservation;
-		this.isAcheter = isAcheter;
-	}
-
-	
 }

@@ -2,10 +2,12 @@ package com.studi.sapioce.JO24BE.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.studi.sapioce.JO24BE.pojo.DataBank;
 import com.studi.sapioce.JO24BE.services.impl.PaiementService;
 
+@Service
 public class MockPaiementService implements PaiementService {
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
