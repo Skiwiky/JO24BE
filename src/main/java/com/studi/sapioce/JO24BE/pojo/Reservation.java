@@ -20,6 +20,8 @@ public class Reservation {
 	private long idUser;
 
 	private List<Billet> billets;
+	
+	private double totalPrix;
 
 	private DataBank datatBank;
 
@@ -70,6 +72,20 @@ public class Reservation {
 	}
 
 	/**
+	 * @return the totalPrix
+	 */
+	public double getTotalPrix() {
+		return totalPrix;
+	}
+
+	/**
+	 * @param totalPrix the totalPrix to set
+	 */
+	public void setTotalPrix(double totalPrix) {
+		this.totalPrix = totalPrix;
+	}
+
+	/**
 	 * @return the datatBank
 	 */
 	public DataBank getDatatBank() {
@@ -115,15 +131,17 @@ public class Reservation {
 		super();
 	}
 
-	public Reservation(long id, long idUser, List<Billet> billets, DataBank datatBank, LocalDateTime dateReservation,
-			boolean isAcheter) {
+	public Reservation(long id, long idUser, List<Billet> billets, double totalPrix, DataBank datatBank,
+			LocalDateTime dateReservation, boolean isAcheter) {
 		super();
 		this.id = id;
 		this.idUser = idUser;
 		this.billets = billets;
+		this.totalPrix = totalPrix;
 		this.datatBank = datatBank;
 		this.dateReservation = dateReservation;
 		this.isAcheter = isAcheter;
 	}
 
+	
 }

@@ -13,12 +13,16 @@ import com.studi.sapioce.JO24BE.pojo.Reservation;
 import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.repository.ReservationRepository;
 import com.studi.sapioce.JO24BE.repository.UserRepository;
+import com.studi.sapioce.JO24BE.services.impl.PaiementService;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ReservationService {
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+	@Autowired
+	private PaiementService paiementService;
 
 	@Autowired
 	private ReservationRepository reservationRepository;
@@ -33,7 +37,7 @@ public class ReservationService {
 		List<Billet> billets = reservation.getBillets();
 		User user = userRepository.findById(reservation.getIdUser()).orElseThrow(
 				() -> new EntityNotFoundException("Utilisateur  non trouvé avec  ID: " + reservation.getIdUser()));
-		
+
 		// creation de la clé de chaque billet
 		for (Billet billet : billets) {
 			String billetKey = passwordEncoder
@@ -41,20 +45,28 @@ public class ReservationService {
 			billet.setBilletKey(billetKey);
 		}
 
-		// Appel Mock de paiement - passer par la transaction comme le systeme bancaire
+		// Appel Mock de paiement
 		// creation de la clé pour hh
 		try {
-//TODO mettre en place lappel de paiement 
-			for (Billet billet : billets) {
-				billet.setFinalKey(billet.getBilletKey() + user.getUserKey());
+			// TODO mettre en place lappel de paiement
+			boolean paiementSuccess = paiementService.processPaiement(reservation.getDatatBank(),
+					reservation.getTotalPrix());
+			if (!paiementSuccess) {
+				throw new RuntimeException("Le paiement a échoué");
+			} else {
+				for (Billet billet : billets) {
+					billet.setFinalKey(billet.getBilletKey() + user.getUserKey());
+				}
+				// Save la reservation une fois le paiement
+				try {
+					user.setWallet(billets);
+					reservationRepository.save(reservation);
+					userRepository.save(user);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 
-		// Save la reservation une fois le paiement
-		try {
-			reservationRepository.save(reservation);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
