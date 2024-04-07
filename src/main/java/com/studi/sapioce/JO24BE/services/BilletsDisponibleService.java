@@ -18,7 +18,7 @@ import com.studi.sapioce.JO24BE.repository.BilletsDisponibleRepository;
 @Service
 public class BilletsDisponibleService {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+	private static final Logger logger = LoggerFactory.getLogger(BilletDisponible.class);
 
 	@Autowired
 	private BilletsDisponibleRepository billetDisponibleRepository;

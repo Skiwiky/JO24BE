@@ -22,7 +22,7 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class BilletsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+	private static final Logger logger = LoggerFactory.getLogger(BilletsService.class);
 
 	@Autowired
 	private UserRepository userRepository;

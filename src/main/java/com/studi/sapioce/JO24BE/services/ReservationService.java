@@ -19,7 +19,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ReservationService {
-	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReservationService.class);
 
 	@Autowired
 	private PaiementService paiementService;
