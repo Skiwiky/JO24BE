@@ -84,11 +84,13 @@ public class BilletsServiceTest {
 	 */
 	@Test
 	public void findById_ThrowsEntityNotFoundException_WhenBilletDoesNotExist() {
-		// Setup
+		Long nonExistingId = 999L;
 		when(billetRepository.findById(1L)).thenReturn(Optional.empty());
 
 		// Execution & Verification
-		assertThrows(EntityNotFoundException.class, () -> billetsService.findById(1L));
+		assertThrows(EntityNotFoundException.class, () -> {
+			billetsService.findById(nonExistingId);
+		});
 	}
 
 	/**

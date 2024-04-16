@@ -1,7 +1,6 @@
 package com.studi.sapioce.JO24BE.pojo;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

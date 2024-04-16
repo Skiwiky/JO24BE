@@ -28,13 +28,15 @@ public class BilletDisponible {
 
 	@Enumerated(EnumType.STRING)
 	private BilletStatut statut;
+	
+	private double prix;
 
 	public BilletDisponible() {
 		super();
 	}
 
 	public BilletDisponible(long id, String sport, String localisation, LocalDate dateEvent, String category,
-			BilletStatut statut) {
+			BilletStatut statut, double prix) {
 		super();
 		this.id = id;
 		this.sport = sport;
@@ -42,6 +44,7 @@ public class BilletDisponible {
 		this.dateEvent = dateEvent;
 		this.category = category;
 		this.statut = statut;
+		this.prix = prix;
 	}
 
 	public long getId() {
@@ -92,4 +95,17 @@ public class BilletDisponible {
 		this.statut = statut;
 	}
 
+	/**
+	 * @return the prix
+	 */
+	public double getPrix() {
+		return prix;
+	}
+
+	/**
+	 * @param prix the prix to set
+	 */
+	public void setPrix(double prix) {
+		this.prix = prix;
+	}
 }

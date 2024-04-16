@@ -1,7 +1,6 @@
 package com.studi.sapioce.JO24BE.pojo;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Entity;

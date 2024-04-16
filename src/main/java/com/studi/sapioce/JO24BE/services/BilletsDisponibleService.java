@@ -39,8 +39,9 @@ public class BilletsDisponibleService {
 
 		List<BilletDisponible> listBilletDispo = new ArrayList<BilletDisponible>();
 		try {
-			listBilletDispo = billetDisponibleRepository.findBySportAndStatutAndCategoryAndDateEvent(sport, statut,
-					category, dateEvent);
+			listBilletDispo = billetDisponibleRepository.findAll();
+//			listBilletDispo = billetDisponibleRepository.findBySportAndStatutAndCategoryAndDateEvent(sport, statut,
+//					category, dateEvent);
 			logger.info("La liste des billets à boen été récupérée.");
 		} catch (Exception e) {
 			logger.error("Impossible de récupérer la liste de billet " + e);

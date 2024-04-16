@@ -24,6 +24,7 @@ import com.studi.sapioce.JO24BE.services.BilletsDisponibleService;
 @RestController
 @RequestMapping("/billetsDisponble/v1")
 public class BilletsDisponibleController {
+	
 	@Autowired
 	private BilletsDisponibleService billetDisponibleService;
 
