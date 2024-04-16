@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.studi.sapioce.JO24BE.pojo.Adress;
+import com.studi.sapioce.JO24BE.pojo.DataBank;
 import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
 import com.studi.sapioce.JO24BE.pojo.Utils.Utils;
@@ -151,26 +152,26 @@ public class UserService {
 	}
 
 	private void userToUserUpdated(User user, User userUpdated) {
-		if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-			userUpdated.setPassword(user.getPassword());
-		}
+		 if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+		        userUpdated.setPassword(user.getPassword());
+		    }
 
-		if (user.getFirstName() != null)
-			userUpdated.setFirstName(user.getFirstName());
-		if (user.getLastName() != null)
-			userUpdated.setLastName(user.getLastName());
-		if (user.getUsername() != null)
-			userUpdated.setUsername(user.getUsername());
+		    if (user.getFirstName() != null) userUpdated.setFirstName(user.getFirstName());
+		    if (user.getLastName() != null) userUpdated.setLastName(user.getLastName());
+		    if (user.getUsername() != null) userUpdated.setUsername(user.getUsername());
 
-		if (user.getDataBanks() != null && user.getDataBanks().isDataSaved() == true) {
-			//TODO Mettre a jour les données bancaire
-			userUpdated.getDataBanks().setNumberCard(user.getDataBanks().getNumberCard());
-			userUpdated.getDataBanks().setNameCard(user.getDataBanks().getNameCard());
-			userUpdated.getDataBanks().setDateClosed(user.getDataBanks().getDateClosed());
-			userUpdated.getDataBanks().setCvv(user.getDataBanks().getCvv());
-
-		}
-
+		    // Vérifier si user.getDataBanks() est null et initialiser si nécessaire
+		    if (user.getDataBanks() != null) {
+		        // Si getDataBanks() est null, initialiser un nouveau DataBank
+		        if (userUpdated.getDataBanks() == null) {
+		            userUpdated.setDataBanks(new DataBank());
+		        }
+		        // Mettre à jour les données bancaires
+		        userUpdated.getDataBanks().setNumberCard(user.getDataBanks().getNumberCard());
+		        userUpdated.getDataBanks().setNameCard(user.getDataBanks().getNameCard());
+		        userUpdated.getDataBanks().setDateClosed(user.getDataBanks().getDateClosed());
+		        userUpdated.getDataBanks().setCvv(user.getDataBanks().getCvv());
+		    }
 	}
 
 }

@@ -5,6 +5,7 @@ package com.studi.sapioce.JO24BE.pojo;
 
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,7 +37,7 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Set<Reservation> reservations;
 
-	@OneToOne(mappedBy = "user")
+	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
 	private DataBank dataBanks;
 
 	public User() {
