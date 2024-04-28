@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.br.CNPJ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -61,8 +62,13 @@ public class WebSecurityConfig {
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
-                                .anyRequest().permitAll());
-//        .anyRequest().authenticated());
+                        .requestMatchers(HttpMethod.GET,"/billetsDisponble/v1/**").permitAll() 
+                        .requestMatchers(HttpMethod.POST,"/billetsDisponble/v1/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/billetsDisponble/v1/**").hasRole("ADMIN") 
+                        .requestMatchers(HttpMethod.DELETE,"/billetsDisponble/v1/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+//                                .anyRequest().permitAll());
+       .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
