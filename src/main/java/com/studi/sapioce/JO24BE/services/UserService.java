@@ -81,6 +81,7 @@ public class UserService {
 		try {
 			user = userRepository.findById(userId)
 					.orElseThrow(() -> new EntityNotFoundException("User not found with ID : " + userId));
+			user.setPassword(null);
 		} catch (Exception e) {
 			logger.error("Impossible de recupérer l'utilateur " + userId + ": " + e);
 		}
@@ -159,6 +160,7 @@ public class UserService {
 		    if (user.getFirstName() != null) userUpdated.setFirstName(user.getFirstName());
 		    if (user.getLastName() != null) userUpdated.setLastName(user.getLastName());
 		    if (user.getUsername() != null) userUpdated.setUsername(user.getUsername());
+		    if (user.getFavoriteSport() != null) userUpdated.setFavoriteSport(user.getFavoriteSport());
 
 		    // Vérifier si user.getDataBanks() est null et initialiser si nécessaire
 		    if (user.getDataBanks() != null) {

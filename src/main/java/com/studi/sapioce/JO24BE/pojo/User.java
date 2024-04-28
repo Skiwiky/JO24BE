@@ -33,6 +33,9 @@ public class User {
 	private String password;
 	private String userKey;
 	private String role;
+	private String favoriteSport;
+	private boolean isAcceptCGU;
+	
 
 	@OneToMany(mappedBy = "user")
 	private Set<Reservation> reservations;
@@ -45,7 +48,7 @@ public class User {
 	}
 
 	public User(Long id, String firstName, String lastName, String username, String password, String userKey,
-			String role, Set<Reservation> reservations, DataBank dataBanks) {
+			String role, String favouriteSport, boolean isAcceptCGU,Set<Reservation> reservations, DataBank dataBanks) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -54,6 +57,8 @@ public class User {
 		this.password = password;
 		this.userKey = userKey;
 		this.role = role;
+		this.favoriteSport = favouriteSport;
+		this.isAcceptCGU = isAcceptCGU;
 		this.reservations = reservations;
 		this.dataBanks = dataBanks;
 	}
@@ -183,5 +188,21 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+	/**
+	 * @return the favoriteSport
+	 */
+	public String getFavoriteSport() {
+		return favoriteSport;
+	}
+
+	/**
+	 * @param favoriteSport the favoriteSport to set
+	 */
+	public void setFavoriteSport(String favoriteSport) {
+		this.favoriteSport = favoriteSport;
+	}
+	
+	
 
 }
