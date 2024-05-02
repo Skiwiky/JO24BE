@@ -1,5 +1,6 @@
 package com.studi.sapioce.JO24BE.pojo;
 
+import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
@@ -29,6 +30,8 @@ public class Billet {
 	private float price;
 
 	private String categoryBillet;
+	
+	private BufferedImage qrCode;
 
 	@ManyToOne
 	@JoinColumn(name = "reservation_id")
@@ -39,7 +42,7 @@ public class Billet {
 	}
 
 	public Billet(long id, String sport, String localisation, LocalDate date, String billetKey, String finalKey,
-			float price, String categoryBillet, Reservation reservation) {
+			float price, String categoryBillet, BufferedImage qrCode, Reservation reservation) {
 		super();
 		this.id = id;
 		this.sport = sport;
@@ -162,6 +165,20 @@ public class Billet {
 	 */
 	public void setCategoryBillet(String categoryBillet) {
 		this.categoryBillet = categoryBillet;
+	}
+
+	/**
+	 * @return the qrCode
+	 */
+	public BufferedImage getQrCode() {
+		return qrCode;
+	}
+
+	/**
+	 * @param qrCode the qrCode to set
+	 */
+	public void setQrCode(BufferedImage qrCode) {
+		this.qrCode = qrCode;
 	}
 
 	/**

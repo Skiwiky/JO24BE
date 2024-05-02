@@ -63,7 +63,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
                         .requestMatchers(HttpMethod.GET,"/billetsDisponble/v1/**").permitAll() 
-                        .requestMatchers(HttpMethod.POST,"/billetsDisponble/v1/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/billetsDisponble/v1/**").permitAll() 
                         .requestMatchers(HttpMethod.PUT,"/billetsDisponble/v1/**").hasRole("ADMIN") 
                         .requestMatchers(HttpMethod.DELETE,"/billetsDisponble/v1/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
