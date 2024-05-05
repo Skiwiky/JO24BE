@@ -20,7 +20,7 @@ public class ReservationController {
 	        this.reservationService = reservationService;
 	    }
 
-	    @PostMapping
+	    @PostMapping(consumes = "application/json")
 	    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
 	        Reservation savedReservation = reservationService.createReservation(reservation);
 	        if (savedReservation != null) {

@@ -5,6 +5,8 @@ package com.studi.sapioce.JO24BE.pojo;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,10 +36,11 @@ public class User {
 	private String userKey;
 	private String role;
 	private String favoriteSport;
-	private boolean isAcceptCGU;
+	private boolean isAcceptCGU = false;
 	
 
 	@OneToMany(mappedBy = "user")
+//	@JsonManagedReference //pour dire a JSON que cest le parents qui dpoit etre serialiser 
 	private Set<Reservation> reservations;
 
 	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
@@ -202,7 +205,18 @@ public class User {
 	public void setFavoriteSport(String favoriteSport) {
 		this.favoriteSport = favoriteSport;
 	}
-	
-	
 
+	/**
+	 * @return the isAcceptCGU
+	 */
+	public boolean isAcceptCGU() {
+		return isAcceptCGU;
+	}
+
+	/**
+	 * @param isAcceptCGU the isAcceptCGU to set
+	 */
+	public void setAcceptCGU(boolean isAcceptCGU) {
+		this.isAcceptCGU = isAcceptCGU;
+	}
 }

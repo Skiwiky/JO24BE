@@ -61,13 +61,11 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+                        auth.requestMatchers("/auth/**", "/reservations/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/billetsDisponble/v1/**").permitAll() 
                         .requestMatchers(HttpMethod.POST,"/billetsDisponble/v1/**").permitAll() 
                         .requestMatchers(HttpMethod.PUT,"/billetsDisponble/v1/**").hasRole("ADMIN") 
                         .requestMatchers(HttpMethod.DELETE,"/billetsDisponble/v1/**").hasRole("ADMIN")
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-//                                .anyRequest().permitAll());
        .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());

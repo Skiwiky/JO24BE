@@ -51,9 +51,9 @@ public class UserService {
 //			throw new IllegalArgumentException("Le format du mot de passe est invalide.");
 //		}
 		userSaved.setPassword(passwordEncoder.encode(userSaved.getPassword()));
-		userSaved.setUserKey(passwordEncoder
-				.encode(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-" + Instant.now().toEpochMilli()));
+		userSaved.setUserKey(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-" + Instant.now().toEpochMilli());
 		userSaved.setRole("USER");
+		userSaved.setAcceptCGU(true);
 
 		try {
 			userRepository.save(userSaved);
@@ -169,6 +169,7 @@ public class UserService {
 		            userUpdated.setDataBanks(new DataBank());
 		        }
 		        // Mettre à jour les données bancaires
+		        userUpdated.getDataBanks().setUser(user);
 		        userUpdated.getDataBanks().setNumberCard(user.getDataBanks().getNumberCard());
 		        userUpdated.getDataBanks().setNameCard(user.getDataBanks().getNameCard());
 		        userUpdated.getDataBanks().setDateClosed(user.getDataBanks().getDateClosed());

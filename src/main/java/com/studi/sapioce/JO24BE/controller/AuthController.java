@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.repository.UserRepository;
 import com.studi.sapioce.JO24BE.security.jwt.JwtUtils;
@@ -72,7 +74,12 @@ public class AuthController {
 		user.setPassword(null);
 
 		JwtResponse jwtResponse = new JwtResponse(jwt, userDetails, user);
-		logger.info("Réponse JWT: {}", jwtResponse); 
+		try {
+			System.out.println("Réponse JWT: {}" + new ObjectMapper().writeValueAsString(jwtResponse));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return ResponseEntity.ok(jwtResponse);
 

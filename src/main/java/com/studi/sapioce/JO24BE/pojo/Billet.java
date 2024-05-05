@@ -1,13 +1,23 @@
 package com.studi.sapioce.JO24BE.pojo;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Base64;
 
+import javax.imageio.ImageIO;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Basic;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -30,11 +40,10 @@ public class Billet {
 	private float price;
 
 	private String categoryBillet;
-	
-	private BufferedImage qrCode;
 
 	@ManyToOne
 	@JoinColumn(name = "reservation_id")
+//	@JsonBackReference
 	private Reservation reservation;
 
 	public Billet() {
@@ -42,7 +51,7 @@ public class Billet {
 	}
 
 	public Billet(long id, String sport, String localisation, LocalDate date, String billetKey, String finalKey,
-			float price, String categoryBillet, BufferedImage qrCode, Reservation reservation) {
+			float price, String categoryBillet, Reservation reservation) {
 		super();
 		this.id = id;
 		this.sport = sport;
@@ -165,20 +174,6 @@ public class Billet {
 	 */
 	public void setCategoryBillet(String categoryBillet) {
 		this.categoryBillet = categoryBillet;
-	}
-
-	/**
-	 * @return the qrCode
-	 */
-	public BufferedImage getQrCode() {
-		return qrCode;
-	}
-
-	/**
-	 * @param qrCode the qrCode to set
-	 */
-	public void setQrCode(BufferedImage qrCode) {
-		this.qrCode = qrCode;
 	}
 
 	/**

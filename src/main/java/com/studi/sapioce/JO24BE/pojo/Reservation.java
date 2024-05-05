@@ -3,6 +3,10 @@ package com.studi.sapioce.JO24BE.pojo;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,11 +22,11 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+	 @Column(name = "user_id")
+	    private Long userId;
 
 	@OneToMany(mappedBy = "reservation")
+//    @JsonManagedReference
 	private Set<Billet> tickets;
 
 	private LocalDateTime dateReservation;
@@ -33,10 +37,10 @@ public class Reservation {
 		super();
 	}
 
-	public Reservation(long id, User user, Set<Billet> tickets, LocalDateTime dateReservation, boolean isAcheter) {
+	public Reservation(long id, Long userId, Set<Billet> tickets, LocalDateTime dateReservation, boolean isAcheter) {
 		super();
 		this.id = id;
-		this.user = user;
+		this.userId = userId;
 		this.tickets = tickets;
 		this.dateReservation = dateReservation;
 		this.isAcheter = isAcheter;
@@ -57,17 +61,17 @@ public class Reservation {
 	}
 
 	/**
-	 * @return the user
+	 * @return the userId
 	 */
-	public User getUser() {
-		return user;
+	public Long getUserId() {
+		return userId;
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param userId the userId to set
 	 */
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	/**
@@ -111,5 +115,20 @@ public class Reservation {
 	public void setAcheter(boolean isAcheter) {
 		this.isAcheter = isAcheter;
 	}
+	
+	/**
+     * @param billet Le billet à ajouter.
+     */
+    public void addTicket(Billet billet) {
+        tickets.add(billet);
+        billet.setReservation(this);
+    }
 
+    /**
+     * @param billet Le billet à retirer.
+     */
+    public void removeTicket(Billet billet) {
+        tickets.remove(billet);
+        billet.setReservation(null);
+    }
 }
