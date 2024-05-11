@@ -3,81 +3,126 @@
  */
 package com.studi.sapioce.JO24BE.pojo;
 
-import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 /**
  * 
  */
 @Entity
-@Getter
-@Setter
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private long id;
 
-	private String firstName;
-	private String lastName;
+	@Column(nullable = false, unique = true)
 	private String username;
+
+	@Column(nullable = false)
 	private String password;
-	private String userKey;
+
+	@Column(nullable = false)
+	private String firstName;
+
+	@Column(nullable = false)
+	private String lastName;
+
+	@Column
+	private String favouriteSport;
+
+	@Column(nullable = false)
+	private String keyUser;
+
+	@Column(nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dateCreated;
+
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date birthdate;
+
+	@Column
 	private String role;
-	private String favoriteSport;
-	private boolean isAcceptCGU = false;
-	
 
-	@OneToMany(mappedBy = "user")
-//	@JsonManagedReference //pour dire a JSON que cest le parents qui dpoit etre serialiser 
-	private Set<Reservation> reservations;
+	private boolean isAccepteCGU = false;
 
-	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
-	private DataBank dataBanks;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Billet> billets;
 
 	public User() {
 		super();
 	}
 
-	public User(Long id, String firstName, String lastName, String username, String password, String userKey,
-			String role, String favouriteSport, boolean isAcceptCGU,Set<Reservation> reservations, DataBank dataBanks) {
+	public User(long id, String username, String password, String firstName, String lastName, String favouriteSport,
+			String keyUser, Date dateCreated, Date birthdate, String role, boolean isAccepteCGU, List<Billet> billets) {
 		super();
 		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
 		this.username = username;
 		this.password = password;
-		this.userKey = userKey;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.favouriteSport = favouriteSport;
+		this.keyUser = keyUser;
+		this.dateCreated = dateCreated;
+		this.birthdate = birthdate;
 		this.role = role;
-		this.favoriteSport = favouriteSport;
-		this.isAcceptCGU = isAcceptCGU;
-		this.reservations = reservations;
-		this.dataBanks = dataBanks;
+		this.isAccepteCGU = isAccepteCGU;
+		this.billets = billets;
 	}
 
 	/**
 	 * @return the id
 	 */
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	/**
@@ -109,73 +154,59 @@ public class User {
 	}
 
 	/**
-	 * @return the email
+	 * @return the favouriteSport
 	 */
-	public String getUsername() {
-		return username;
+	public String getFavouriteSport() {
+		return favouriteSport;
 	}
 
 	/**
-	 * @param email the email to set
+	 * @param favouriteSport the favouriteSport to set
 	 */
-	public void setUsername(String username) {
-		this.username = username;
+	public void setFavouriteSport(String favouriteSport) {
+		this.favouriteSport = favouriteSport;
 	}
 
 	/**
-	 * @return the password
+	 * @return the keyUser
 	 */
-	public String getPassword() {
-		return password;
+	public String getKeyUser() {
+		return keyUser;
 	}
 
 	/**
-	 * @param password the password to set
+	 * @param keyUser the keyUser to set
 	 */
-	public void setPassword(String password) {
-		this.password = password;
+	public void setKeyUser(String keyUser) {
+		this.keyUser = keyUser;
 	}
 
 	/**
-	 * @return the userKey
+	 * @return the dateCreated
 	 */
-	public String getUserKey() {
-		return userKey;
+	public Date getDateCreated() {
+		return dateCreated;
 	}
 
 	/**
-	 * @param userKey the userKey to set
+	 * @param dateCreated the dateCreated to set
 	 */
-	public void setUserKey(String userKey) {
-		this.userKey = userKey;
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	/**
-	 * @return the reservations
+	 * @return the birthdate
 	 */
-	public Set<Reservation> getReservations() {
-		return reservations;
+	public Date getBirthdate() {
+		return birthdate;
 	}
 
 	/**
-	 * @param reservations the reservations to set
+	 * @param birthdate the birthdate to set
 	 */
-	public void setReservations(Set<Reservation> reservations) {
-		this.reservations = reservations;
-	}
-
-	/**
-	 * @return the dataBanks
-	 */
-	public DataBank getDataBanks() {
-		return dataBanks;
-	}
-
-	/**
-	 * @param dataBanks the dataBanks to set
-	 */
-	public void setDataBanks(DataBank dataBanks) {
-		this.dataBanks = dataBanks;
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
 	}
 
 	/**
@@ -193,30 +224,30 @@ public class User {
 	}
 
 	/**
-	 * @return the favoriteSport
+	 * @return the isAccepteCGU
 	 */
-	public String getFavoriteSport() {
-		return favoriteSport;
+	public boolean isAccepteCGU() {
+		return isAccepteCGU;
 	}
 
 	/**
-	 * @param favoriteSport the favoriteSport to set
+	 * @param isAccepteCGU the isAccepteCGU to set
 	 */
-	public void setFavoriteSport(String favoriteSport) {
-		this.favoriteSport = favoriteSport;
+	public void setAccepteCGU(boolean isAccepteCGU) {
+		this.isAccepteCGU = isAccepteCGU;
 	}
 
 	/**
-	 * @return the isAcceptCGU
+	 * @return the billets
 	 */
-	public boolean isAcceptCGU() {
-		return isAcceptCGU;
+	public List<Billet> getBillets() {
+		return billets;
 	}
 
 	/**
-	 * @param isAcceptCGU the isAcceptCGU to set
+	 * @param billets the billets to set
 	 */
-	public void setAcceptCGU(boolean isAcceptCGU) {
-		this.isAcceptCGU = isAcceptCGU;
+	public void setBillets(List<Billet> billets) {
+		this.billets = billets;
 	}
 }

@@ -1,11 +1,9 @@
 package com.studi.sapioce.JO24BE.services;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.studi.sapioce.JO24BE.pojo.Adress;
-import com.studi.sapioce.JO24BE.pojo.DataBank;
+import com.studi.sapioce.JO24BE.pojo.Billet;
 import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
 import com.studi.sapioce.JO24BE.pojo.Utils.Utils;
+import com.studi.sapioce.JO24BE.repository.BilletsRepository;
 import com.studi.sapioce.JO24BE.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -30,6 +28,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private BilletsRepository billetsRepository;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -51,9 +52,10 @@ public class UserService {
 //			throw new IllegalArgumentException("Le format du mot de passe est invalide.");
 //		}
 		userSaved.setPassword(passwordEncoder.encode(userSaved.getPassword()));
-		userSaved.setUserKey(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-" + Instant.now().toEpochMilli());
+		userSaved.setKeyUser(userSaved.getFirstName() + "-" + userSaved.getLastName() + "-" + Instant.now().toEpochMilli());
 		userSaved.setRole("USER");
-		userSaved.setAcceptCGU(true);
+		userSaved.setAccepteCGU(true);
+		userSaved.setDateCreated(new Date());
 
 		try {
 			userRepository.save(userSaved);
@@ -82,6 +84,7 @@ public class UserService {
 			user = userRepository.findById(userId)
 					.orElseThrow(() -> new EntityNotFoundException("User not found with ID : " + userId));
 			user.setPassword(null);
+			user.setBillets(billetsRepository.findByUserId(userId));
 		} catch (Exception e) {
 			logger.error("Impossible de recupérer l'utilateur " + userId + ": " + e);
 		}
@@ -160,21 +163,7 @@ public class UserService {
 		    if (user.getFirstName() != null) userUpdated.setFirstName(user.getFirstName());
 		    if (user.getLastName() != null) userUpdated.setLastName(user.getLastName());
 		    if (user.getUsername() != null) userUpdated.setUsername(user.getUsername());
-		    if (user.getFavoriteSport() != null) userUpdated.setFavoriteSport(user.getFavoriteSport());
-
-		    // Vérifier si user.getDataBanks() est null et initialiser si nécessaire
-		    if (user.getDataBanks() != null) {
-		        // Si getDataBanks() est null, initialiser un nouveau DataBank
-		        if (userUpdated.getDataBanks() == null) {
-		            userUpdated.setDataBanks(new DataBank());
-		        }
-		        // Mettre à jour les données bancaires
-		        userUpdated.getDataBanks().setUser(user);
-		        userUpdated.getDataBanks().setNumberCard(user.getDataBanks().getNumberCard());
-		        userUpdated.getDataBanks().setNameCard(user.getDataBanks().getNameCard());
-		        userUpdated.getDataBanks().setDateClosed(user.getDataBanks().getDateClosed());
-		        userUpdated.getDataBanks().setCvv(user.getDataBanks().getCvv());
-		    }
+		    if (user.getFavouriteSport() != null) userUpdated.setFavouriteSport(user.getFavouriteSport());
 	}
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.studi.sapioce.JO24BE.pojo.Billet;
 import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
+import com.studi.sapioce.JO24BE.pojo.dto.BilletDTO;
 import com.studi.sapioce.JO24BE.services.BilletsService;
 
 @RestController
@@ -27,8 +28,8 @@ public class BilletsController {
 	private BilletsService billetService;
 
 	@GetMapping
-	public ResponseEntity<List<Billet>> getAllBillets() {
-		List<Billet> listBillet = new ArrayList<Billet>();
+	public ResponseEntity<List<BilletDTO>> getAllBillets() {
+		List<BilletDTO> listBillet = new ArrayList<BilletDTO>();
 		listBillet = billetService.findAll();
 		return new ResponseEntity<>(listBillet, HttpStatus.OK);
 	}

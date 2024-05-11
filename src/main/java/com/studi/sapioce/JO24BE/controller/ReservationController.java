@@ -7,26 +7,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.studi.sapioce.JO24BE.pojo.Reservation;
+import com.studi.sapioce.JO24BE.pojo.User;
+import com.studi.sapioce.JO24BE.pojo.dto.UserPaiementDTO;
 import com.studi.sapioce.JO24BE.services.ReservationService;
 
 @RestController
 @RequestMapping("/reservations")
 public class ReservationController {
-	 private final ReservationService reservationService;
+	
+	@Autowired
+	private ReservationService reservationService;
 
-	    @Autowired
-	    public ReservationController(ReservationService reservationService) {
-	        this.reservationService = reservationService;
-	    }
-
-	    @PostMapping(consumes = "application/json")
-	    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-	        Reservation savedReservation = reservationService.createReservation(reservation);
-	        if (savedReservation != null) {
-	            return ResponseEntity.ok(savedReservation);
-	        } else {
-	            return ResponseEntity.badRequest().build();
-	        }
-	    }
+	@PostMapping(consumes = "application/json")
+	public ResponseEntity<User> createReservation(@RequestBody UserPaiementDTO userPaiementDTO) {
+		User savedUserReservation = reservationService.createReservation(userPaiementDTO);
+		if (savedUserReservation != null) {
+			return ResponseEntity.ok(savedUserReservation);
+		} else {
+			return ResponseEntity.badRequest().build();
+		}
+	}
 }

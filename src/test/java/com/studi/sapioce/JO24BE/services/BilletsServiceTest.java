@@ -1,149 +1,127 @@
 package com.studi.sapioce.JO24BE.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.studi.sapioce.JO24BE.pojo.Billet;
-import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
+import com.studi.sapioce.JO24BE.pojo.dto.BilletDTO;
 import com.studi.sapioce.JO24BE.repository.BilletsRepository;
 import com.studi.sapioce.JO24BE.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @SpringBootTest
-public class BilletsServiceTest {
+class BilletsServiceTest {
 
-	@Mock
-	private UserRepository userRepository;
+    @Mock
+    private UserRepository userRepository;
 
-	@Mock
-	private BilletsRepository billetRepository;
+    @Mock
+    private BilletsRepository billetRepository;
 
-	@Mock
-	private BCryptPasswordEncoder passwordEncoder;
+    @InjectMocks
+    private BilletsService billetsService;
 
-	@InjectMocks
-	private BilletsService billetsService;
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-	/**
-	 * 
-	 */
-	@Test
-	public void findAll_ReturnsAllBilletsTest() {
-		// Setup
-		List<Billet> expectedBillets = new ArrayList<>();
-		expectedBillets.add(new Billet());
-		when(billetRepository.findAll()).thenReturn(expectedBillets);
+    @Test
+    void testFindAll() {
+        Billet billet = new Billet();
+        billet.setSport("Football");
+        billet.setLocalisation("Paris");
+        billet.setDateEvent(new Date());
+        billet.setCategory("VIP");
+        billet.setPrix(100);
+        billet.setDateAchat(new Date());
 
-		// Execution
-		List<Billet> actualBillets = billetsService.findAll();
+        when(billetRepository.findAll()).thenReturn(Arrays.asList(billet));
 
-		// Verification
-		assertFalse(actualBillets.isEmpty(), "La liste des billets ne devrait pas être vide");
-		verify(billetRepository).findAll();
-	}
+        List<BilletDTO> result = billetsService.findAll();
 
-	/**
-	 * 
-	 */
-	@Test
-	public void findById_ReturnsBillet_WhenBilletExistsTest() {
-		// Setup
-		Billet expectedBillet = new Billet();
-		when(billetRepository.findById(1L)).thenReturn(Optional.of(expectedBillet));
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Football", result.get(0).getSport());
+    }
 
-		// Execution
-		Billet actualBillet = billetsService.findById(1L);
+    @Test
+    void testFindById() {
+        Billet billet = new Billet();
+        billet.setId(1L);
 
-		// Verification
-		assertNotNull(actualBillet, "Le billet devrait être trouvé");
-		verify(billetRepository).findById(1L);
-	}
+        when(billetRepository.findById(1L)).thenReturn(Optional.of(billet));
 
-	/**
-	 * 
-	 */
-	@Test
-	public void findById_ThrowsEntityNotFoundException_WhenBilletDoesNotExist() {
-		Long nonExistingId = 999L;
-		when(billetRepository.findById(1L)).thenReturn(Optional.empty());
+        Billet result = billetsService.findById(1L);
 
-		// Execution & Verification
-		assertThrows(EntityNotFoundException.class, () -> {
-			billetsService.findById(nonExistingId);
-		});
-	}
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+    }
 
-	/**
-	 * teste de la methode savec pour verifier si on nous a le bon retour dans la methode
-	 */
-	@Test
-	public void save_ReturnsSavedBillet() {
-		// Setup
-		Billet billetToSave = new Billet();
-		User user = new User();
-		user.setId(1L);
-		when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-		when(passwordEncoder.encode(anyString())).thenReturn("encodedKey");
-		when(billetRepository.save(any(Billet.class))).thenReturn(billetToSave);
+    @Test
+    void testFindById_NotFound() {
+        when(billetRepository.findById(1L)).thenReturn(Optional.empty());
 
-		// Execution
-		Billet savedBillet = billetsService.save(1L, billetToSave);
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
+            billetsService.findById(1L);
+        });
 
-		// Verification
-		assertNotNull(savedBillet, "Le billet devrait être enregistré");
-		verify(billetRepository).save(billetToSave);
-	}
+        String expectedMessage = "Billet not found: 1";
+        String actualMessage = exception.getMessage();
 
-	/**
-	 * test de la methode suppression dans le cas ou le billet existe
-	 */
-	@Test
-	public void deleteById_ReturnsSuccessMessage_WhenBilletExists() {
-		// Setup
-		when(billetRepository.existsById(1L)).thenReturn(true);
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 
-		// Execution
-		ResponseMessage response = billetsService.deleteById(1L);
+    @Test
+    void testSave() {
+        Billet billet = new Billet();
+        billet.setId(1L);
 
-		// Verification
-		assertEquals("Billet supprimé avec succès", response.getMessage());
-		verify(billetRepository).deleteById(1L);
-	}
+        when(billetRepository.save(any(Billet.class))).thenReturn(billet);
 
-	/**
-	 * test de la methode de suppression si le billet n'existe pas 
-	 */
-	@Test
-	public void deleteById_ReturnsNotFoundMessage_WhenBilletDoesNotExist() {
-		// Setup
-		when(billetRepository.existsById(1L)).thenReturn(false);
+        Billet result = billetsService.save(1L, billet);
 
-		// Execution
-		ResponseMessage response = billetsService.deleteById(1L);
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+    }
 
-		// Verification
-		assertEquals("Billet non trouvé avec l'ID : 1", response.getMessage());
-		verify(billetRepository, never()).deleteById(anyLong());
-	}
+    @Test
+    void testDeleteById_Success() {
+        when(billetRepository.existsById(1L)).thenReturn(true);
 
+        ResponseMessage result = billetsService.deleteById(1L);
+
+        verify(billetRepository, times(1)).deleteById(1L);
+        assertEquals("Billet supprimé avec succès", result.getMessage());
+    }
+
+    @Test
+    void testDeleteById_NotFound() {
+        when(billetRepository.existsById(1L)).thenReturn(false);
+
+        ResponseMessage result = billetsService.deleteById(1L);
+
+        verify(billetRepository, times(0)).deleteById(1L);
+        assertEquals("Billet non trouvé avec l'ID : 1", result.getMessage());
+    }
 }

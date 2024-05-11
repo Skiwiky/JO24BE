@@ -1,17 +1,15 @@
 package com.studi.sapioce.JO24BE.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.studi.sapioce.JO24BE.pojo.Billet;
-import com.studi.sapioce.JO24BE.pojo.Reservation;
+import com.studi.sapioce.JO24BE.pojo.DataBank;
 import com.studi.sapioce.JO24BE.pojo.User;
-import com.studi.sapioce.JO24BE.repository.ReservationRepository;
+import com.studi.sapioce.JO24BE.pojo.dto.UserPaiementDTO;
 import com.studi.sapioce.JO24BE.repository.UserRepository;
 import com.studi.sapioce.JO24BE.services.impl.PaiementService;
 
@@ -25,45 +23,45 @@ public class ReservationService {
 	private PaiementService paiementService;
 
 	@Autowired
-	private ReservationRepository reservationRepository;
-
-	@Autowired
 	private UserRepository userRepository;
 
-	public Reservation createReservation(Reservation reservation) {
-		// TODO a revoir absolument la construction de la methode
-		User user = userRepository.findById(reservation.getUserId())
+	public User createReservation(@RequestBody UserPaiementDTO userPaimentDTO) {
+		User user = userRepository.findById(userPaimentDTO.getUser().getId())
 				.orElseThrow(() -> new EntityNotFoundException(
-						"Utilisateur  non trouvé avec  ID: " + reservation.getUserId()));
+						"Utilisateur  non trouvé avec  ID: " + userPaimentDTO.getUser().getId()));
 
-		float totalPrix = reservation.getTickets().stream().map(Billet::getPrice).reduce(0f, Float::sum);
+		// TODO a revoir absolument la construction de la methode
+		DataBank dataBankDTO = userPaimentDTO.getDataBanks();
+		User userDTO = userPaimentDTO.getUser();
+		userDTO.setPassword(user.getPassword());
+		
+		float totalPrix = 0;
 
 		// creation de la clé de chaque billet et calcul du prix global
-		for (Billet billet : reservation.getTickets()) {
-			String billetKey = billet.getSport() + billet.getDate() + billet.getLocalisation() + billet.getPrice();
+		for (Billet billet : userDTO.getBillets()) {
+			String billetKey = billet.getSport() + billet.getDateEvent() + billet.getLocalisation() + billet.getPrix();
+			totalPrix += billet.getPrix();
 			billet.setBilletKey(billetKey);
+			billet.setUser(userDTO);
 		}
 
 		// Appel Mock de paiement
 		// creation de la clé pour hh
 		try {
-			boolean paiementSuccess = paiementService.processPaiement(reservation.getUser().getDataBanks(), totalPrix);
-			if (!paiementSuccess) {
-				throw new RuntimeException("Le paiement a échoué");
+			boolean paiementSuccess = paiementService.processPaiement(dataBankDTO, totalPrix);
+//			if (paiementSuccess) {
+//				throw new RuntimeException("Le paiement a échoué");
+//			}
+			for (Billet billet : userDTO.getBillets()) {
+				billet.setReservatioKey(userDTO.getKeyUser()+ billet.getBilletKey());
 			}
-
-			// Liaison des billets à la réservation et peut-être à l'utilisateur
-			reservation.setTickets(reservation.getTickets().stream().peek(billet -> {
-				billet.setReservation(reservation); // Liaison billet-réservation
-			}).collect(Collectors.toSet()));
-
-			reservation.setUser(user);
-			reservationRepository.save(reservation); // Sauvegarde de la réservation avec les billets liés
+			System.out.println("affiche "+ userDTO.getBillets());
+			userRepository.save(userDTO); // Sauvegarde de la réservation avec les billets liés
 
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
-		return reservation;
+		return userDTO;
 	}
 }

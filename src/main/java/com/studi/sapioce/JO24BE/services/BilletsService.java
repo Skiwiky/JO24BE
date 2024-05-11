@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.studi.sapioce.JO24BE.pojo.Billet;
 import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.pojo.Utils.ResponseMessage;
+import com.studi.sapioce.JO24BE.pojo.dto.BilletDTO;
 import com.studi.sapioce.JO24BE.repository.BilletsRepository;
 import com.studi.sapioce.JO24BE.repository.UserRepository;
 
@@ -38,14 +39,17 @@ public class BilletsService {
 	 * 
 	 * @return
 	 */
-	public List<Billet> findAll() {
+	public List<BilletDTO> findAll() {
 		List<Billet> listBillets = new ArrayList<Billet>();
+		List<BilletDTO> listBilletsDTO = new ArrayList<BilletDTO>();
 		try {
 			listBillets = billetRepository.findAll();
+					//todo de ta mere ajouter le transformer billetDTO
+				transformBilletToBilletDTO(listBillets, listBilletsDTO);
 		} catch (Exception e) {
 			logger.error("Impossible de récupérer la liste des billets, " + e);
 		}
-		return listBillets;
+		return listBilletsDTO;
 	}
 
 	/**
@@ -97,6 +101,19 @@ public class BilletsService {
 			return new ResponseMessage("Erreur lors de la suppression du billet");
 		}
 
+	}
+	
+	private void transformBilletToBilletDTO(List<Billet> listBillets, List<BilletDTO> listBilletsDTO) {
+		for (Billet billet : listBillets) {
+			BilletDTO billetDTO = new BilletDTO();
+			billetDTO.setSport(billet.getSport());
+			billetDTO.setLocalisation(billet.getLocalisation());
+			billetDTO.setDateEvent(billet.getDateEvent());
+			billetDTO.setCategory(billet.getCategory());
+			billetDTO.setPrix(billet.getPrix());
+			billetDTO.setDateAchat(billet.getDateAchat());
+			listBilletsDTO.add(billetDTO);
+		}
 	}
 
 }
