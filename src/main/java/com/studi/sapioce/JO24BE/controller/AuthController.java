@@ -1,7 +1,5 @@
 package com.studi.sapioce.JO24BE.controller;
 
-import java.util.ArrayList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,19 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studi.sapioce.JO24BE.pojo.User;
-import com.studi.sapioce.JO24BE.repository.UserRepository;
 import com.studi.sapioce.JO24BE.security.jwt.JwtUtils;
 import com.studi.sapioce.JO24BE.security.payload.request.LoginRequest;
-import com.studi.sapioce.JO24BE.security.payload.request.SignUpRequest;
 import com.studi.sapioce.JO24BE.security.payload.response.JwtResponse;
 import com.studi.sapioce.JO24BE.security.payload.response.MessageResponse;
-import com.studi.sapioce.JO24BE.security.service.UserDetailsImpl;
-import com.studi.sapioce.JO24BE.security.service.UserDetailsServiceImpl;
 import com.studi.sapioce.JO24BE.services.UserService;
 
 import jakarta.validation.Valid;
@@ -50,9 +44,6 @@ public class AuthController {
 
 	@Autowired
 	UserService userService;
-
-	@Autowired
-	private UserDetailsServiceImpl userDetailsService;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
