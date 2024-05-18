@@ -14,13 +14,14 @@ public class CorsConfig {
 	@Bean
 	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://jo2024sapioce.web.app"));
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.setAllowedOriginPatterns(Arrays.asList("http://localhost:4200", "https://jo2024sapioce.web.app"));
+//		config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://jo2024sapioce.web.app"));
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
 	}
-	
+
 }
