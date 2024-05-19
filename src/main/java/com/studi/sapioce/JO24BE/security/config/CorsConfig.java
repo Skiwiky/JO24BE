@@ -12,16 +12,18 @@ import org.springframework.web.filter.CorsFilter;
 public class CorsConfig {
 
 	@Bean
-	public CorsFilter corsFilter() {
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true);
-		config.addAllowedOrigin("https://jo2024sapioce.web.app/");
-		config.addAllowedHeader("*");
-		config.addAllowedMethod("*");
-		source.registerCorsConfiguration("/**", config);
-		return new CorsFilter(source);
-	}
-
-//	config.addAllowedOrigin("http://localhost:4200");
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        // Liste des origines autorisées
+        config.setAllowedOrigins(Arrays.asList(
+                "https://jo2024sapioce.web.app",
+                "http://localhost:4200"
+        ));
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 }
