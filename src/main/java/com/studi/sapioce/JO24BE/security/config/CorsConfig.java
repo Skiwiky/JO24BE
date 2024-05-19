@@ -16,7 +16,6 @@ public class CorsConfig {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-//		config.addAllowedOrigin("http://localhost:4200");
 		config.addAllowedOrigin("https://jo2024sapioce.web.app");
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
@@ -24,4 +23,5 @@ public class CorsConfig {
 		return new CorsFilter(source);
 	}
 
+//	config.addAllowedOrigin("http://localhost:4200");
 }
