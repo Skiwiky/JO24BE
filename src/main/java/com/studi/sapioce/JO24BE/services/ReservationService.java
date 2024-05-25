@@ -3,13 +3,17 @@ package com.studi.sapioce.JO24BE.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.studi.sapioce.JO24BE.pojo.Billet;
 import com.studi.sapioce.JO24BE.pojo.DataBank;
 import com.studi.sapioce.JO24BE.pojo.User;
 import com.studi.sapioce.JO24BE.pojo.dto.UserPaiementDTO;
+import com.studi.sapioce.JO24BE.repository.BilletsRepository;
 import com.studi.sapioce.JO24BE.repository.UserRepository;
 import com.studi.sapioce.JO24BE.services.impl.PaiementService;
 
@@ -24,6 +28,9 @@ public class ReservationService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private BilletsRepository billetsRepository;
 
 	public User createReservation(@RequestBody UserPaiementDTO userPaimentDTO) {
 		User user = userRepository.findById(userPaimentDTO.getUser().getId())
@@ -64,4 +71,9 @@ public class ReservationService {
 
 		return userDTO;
 	}
+	
+	 public boolean checkReservationKey(String reservationKey) {
+	        return billetsRepository.existsByReservatioKey(reservationKey);
+	    }
+	
 }
