@@ -31,9 +31,9 @@ public class ReservationController {
 		}
 	}
 	
-	 @GetMapping("/check/{reservationKey}")
-	    public ResponseEntity<Boolean> checkReservationKey(@PathVariable String reservationKey) {
-	        boolean exists = reservationService.checkReservationKey(reservationKey);
+	 @GetMapping("verify")
+	    public ResponseEntity<String> checkReservationKey(@RequestParam String shortKey) {
+	        String exists = reservationService.checkShortKey(shortKey);
 	        return ResponseEntity.ok(exists);
 	    }
 }

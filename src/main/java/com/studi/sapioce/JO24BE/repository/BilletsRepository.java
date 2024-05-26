@@ -7,8 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.studi.sapioce.JO24BE.pojo.Billet;
 
 public interface BilletsRepository extends JpaRepository<Billet, Long> {
-	
-	 List<Billet> findByUserId(Long userId);
-	 
-	 boolean existsByReservatioKey(String reservationKey);
+
+	List<Billet> findByUserId(Long userId);
+
+	boolean existsByReservatioKey(String reservationKey);
+
+	boolean existsByShortKey(String shortKey);
+
+	Billet findByShortKey(String shortKey);
 }

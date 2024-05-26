@@ -48,9 +48,12 @@ public class Billet {
 	@Column(nullable = false)
 	private String reservatioKey;
 
+	@Column(nullable = false)
+	private String shortKey;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
-    @JsonIgnoreProperties("billets")
+	@JsonIgnoreProperties("billets")
 	private User user;
 
 	public Billet() {
@@ -58,7 +61,7 @@ public class Billet {
 	}
 
 	public Billet(long id, String sport, String localisation, Date dateEvent, String category, double prix,
-			Date dateAchat, String billetKey, String reservatioKey, User user) {
+			Date dateAchat, String billetKey, String reservatioKey, String shortKey, User user) {
 		super();
 		this.id = id;
 		this.sport = sport;
@@ -69,8 +72,11 @@ public class Billet {
 		this.dateAchat = dateAchat;
 		this.billetKey = billetKey;
 		this.reservatioKey = reservatioKey;
+		this.shortKey = shortKey;
 		this.user = user;
 	}
+
+
 
 	/**
 	 * @return the id
@@ -196,6 +202,20 @@ public class Billet {
 	 */
 	public void setReservatioKey(String reservatioKey) {
 		this.reservatioKey = reservatioKey;
+	}
+
+	/**
+	 * @return the shortKey
+	 */
+	public String getShortKey() {
+		return shortKey;
+	}
+
+	/**
+	 * @param shortKey the shortKey to set
+	 */
+	public void setShortKey(String shortKey) {
+		this.shortKey = shortKey;
 	}
 
 	/**
