@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.studi.sapioce.JO24BE.pojo.Billet;
 import com.studi.sapioce.JO24BE.pojo.DataBank;
 import com.studi.sapioce.JO24BE.pojo.User;
+import com.studi.sapioce.JO24BE.pojo.dto.BilletDTO;
+import com.studi.sapioce.JO24BE.pojo.dto.UserDTO;
 import com.studi.sapioce.JO24BE.pojo.dto.UserPaiementDTO;
 import com.studi.sapioce.JO24BE.repository.BilletsRepository;
 import com.studi.sapioce.JO24BE.repository.UserRepository;
@@ -74,24 +78,27 @@ public class ReservationService {
 
 		return userDTO;
 	}
-	
-	
+
 	// methode pouer verifier si la cle est présente
-		public String checkShortKey(String shortKey) {
-	        try {
-				Billet billet =  billetsRepository.findByShortKey(shortKey);
-				if (billet != null) {
-				    return billet.getReservatioKey();
-				} else {
-				    return "Réservation non trouvé.";
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				 return "Erreur lors de la vérification de la clé.";
+	public UserDTO checkShortKey(String shortKey) {
+		try {
+			Billet billet = billetsRepository.findByShortKey(shortKey);
+			if (billet != null) {
+				long idUser = billet.getUser().getId();
+				User user = userRepository.findById(idUser)
+						.orElseThrow(() -> new EntityNotFoundException("User not found with ID : " + idUser));
+				user.setPassword(null);
+				 return convertToUserDTO(user);
+			} else {
+				throw new Exception("Réservation non trouvée.");
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block e.printStackTrace();
+
+			e.printStackTrace();
+			throw new RuntimeException("Erreur lors de la vérification de la clé.", e);
 		}
-	
+	}
 
 	// merthode pour généerer une clé reduite a partir d'une ReservationKey
 	public String generateUniqueShortKey(String reservationKey) {
@@ -113,6 +120,17 @@ public class ReservationService {
 		}
 	}
 
-	
+	private UserDTO convertToUserDTO(User user) {
+		List<BilletDTO> billetDTOs = user.getBillets().stream().map(this::convertToBilletDTO)
+				.collect(Collectors.toList());
+
+		return new UserDTO(String.valueOf(user.getId()), user.getUsername(), user.getFirstName(), user.getLastName(),
+				user.getFavouriteSport(), billetDTOs);
+	}
+
+	private BilletDTO convertToBilletDTO(Billet billet) {
+		return new BilletDTO(billet.getSport(), billet.getLocalisation(), billet.getDateEvent(), billet.getCategory(),
+				billet.getPrix(), billet.getDateAchat(), billet.getReservatioKey(), billet.getShortKey());
+	}
 
 }

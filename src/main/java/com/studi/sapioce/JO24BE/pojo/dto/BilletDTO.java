@@ -15,12 +15,18 @@ public class BilletDTO {
 	private double prix;
 
 	private Date dateAchat;
+	
+	private String reservationKey;
+	
+	private String shortKey;
 
 	public BilletDTO() {
 		super();
 	}
 	
-	public BilletDTO(String sport, String localisation, Date dateEvent, String category, double prix, Date dateAchat) {
+
+	public BilletDTO(String sport, String localisation, Date dateEvent, String category, double prix, Date dateAchat,
+			String reservationKey, String shortKey) {
 		super();
 		this.sport = sport;
 		this.localisation = localisation;
@@ -28,7 +34,10 @@ public class BilletDTO {
 		this.category = category;
 		this.prix = prix;
 		this.dateAchat = dateAchat;
+		this.reservationKey = reservationKey;
+		this.shortKey = shortKey;
 	}
+
 
 	/**
 	 * @return the sport
@@ -113,4 +122,34 @@ public class BilletDTO {
 	public void setDateAchat(Date dateAchat) {
 		this.dateAchat = dateAchat;
 	}
+
+	/**
+	 * @return the reservationKey
+	 */
+	public String getReservationKey() {
+		return reservationKey;
+	}
+
+	/**
+	 * @param reservationKey the reservationKey to set
+	 */
+	public void setReservationKey(String reservationKey) {
+		this.reservationKey = reservationKey;
+	}
+
+	/**
+	 * @return the shortKey
+	 */
+	public String getShortKey() {
+		return shortKey;
+	}
+
+	/**
+	 * @param shortKey the shortKey to set
+	 */
+	public void setShortKey(String shortKey) {
+		this.shortKey = shortKey;
+	}
+	
+	
 }
