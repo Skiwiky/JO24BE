@@ -18,7 +18,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         // Liste des origines autorisées
         config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:4200"
+                "https://jo2024sapioce.web.app"
         ));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
