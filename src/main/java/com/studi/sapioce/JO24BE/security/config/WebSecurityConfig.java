@@ -52,8 +52,9 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors()  // Activation du support CORS
-            .and()
+        http
+        //.cors()  // Activation du support CORS
+         //   .and()
             .csrf(csrf -> csrf.disable())  // Désactiver CSRF car API REST
             .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Mode stateless pour API REST
