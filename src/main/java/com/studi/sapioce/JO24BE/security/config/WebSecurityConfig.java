@@ -52,27 +52,14 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors() // Activation du support CORS
-				.and().csrf(csrf -> csrf.disable()) // Désactiver CSRF car API REST
+		http.cors() // Activer le support CORS
+				.and().csrf(csrf -> csrf.disable()) // Désactiver CSRF pour les API REST
 				.exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Mode
 																												// stateless
-																												// pour
-																												// API
-																												// REST
-				.authorizeHttpRequests(auth -> auth
-						// Routes publiques
-						.requestMatchers("/auth/**", "/reservations/**").permitAll()
-						.requestMatchers(HttpMethod.GET, "/billetsDisponble/v1/**").permitAll()
-						.requestMatchers(HttpMethod.POST, "/billetsDisponble/v1/**").permitAll()
-						// Routes nécessitant des rôles spécifiques
-						.requestMatchers(HttpMethod.PUT, "/billetsDisponble/v1/**").hasRole("ADMIN")
-						.requestMatchers(HttpMethod.DELETE, "/billetsDisponble/v1/**").hasRole("ADMIN")
-						// Toutes les autres requêtes doivent être authentifiées
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**", "/reservations/**").permitAll()
 						.anyRequest().authenticated());
 
-		// Ajout des filtres d'authentification et de token
-		http.authenticationProvider(authenticationProvider());
 		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
