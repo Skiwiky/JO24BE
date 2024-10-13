@@ -18,7 +18,8 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         
         config.setAllowedOriginPatterns(Arrays.asList(
-                "https://jo2024sapioce.web.app"
+                "https://jo2024sapioce.web.app",
+                "https://jo2024-7692bdc14032.herokuapp.com"
         ));
         
         // Autoriser tous les headers et les méthodes
