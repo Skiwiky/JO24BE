@@ -21,58 +21,60 @@ import com.studi.sapioce.JO24BE.security.service.UserDetailsServiceImpl;
 @Configuration
 public class WebSecurityConfig {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+	@Autowired
+	private UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt authEntryPointJwt;
+	@Autowired
+	private AuthEntryPointJwt authEntryPointJwt;
 
-    @Bean
-    public AuthTokenFilter authTokenFilter() {
-        return new AuthTokenFilter();
-    }
+	@Bean
+	public AuthTokenFilter authTokenFilter() {
+		return new AuthTokenFilter();
+	}
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+		authProvider.setUserDetailsService(userDetailsService);
+		authProvider.setPasswordEncoder(passwordEncoder());
+		return authProvider;
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+		return authConfig.getAuthenticationManager();
+	}
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-        //.cors()  // Activation du support CORS
-         //   .and()
-            .csrf(csrf -> csrf.disable())  // Désactiver CSRF car API REST
-            .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Mode stateless pour API REST
-            .authorizeHttpRequests(auth -> auth
-                // Routes publiques
-                .requestMatchers("/auth/**", "/reservations/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/billetsDisponble/v1/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/billetsDisponble/v1/**").permitAll()
-                // Routes nécessitant des rôles spécifiques
-                .requestMatchers(HttpMethod.PUT, "/billetsDisponble/v1/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/billetsDisponble/v1/**").hasRole("ADMIN")
-                // Toutes les autres requêtes doivent être authentifiées
-                .anyRequest().authenticated());
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.cors() // Activation du support CORS
+				.and().csrf(csrf -> csrf.disable()) // Désactiver CSRF car API REST
+				.exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Mode
+																												// stateless
+																												// pour
+																												// API
+																												// REST
+				.authorizeHttpRequests(auth -> auth
+						// Routes publiques
+						.requestMatchers("/auth/**", "/reservations/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/billetsDisponble/v1/**").permitAll()
+						.requestMatchers(HttpMethod.POST, "/billetsDisponble/v1/**").permitAll()
+						// Routes nécessitant des rôles spécifiques
+						.requestMatchers(HttpMethod.PUT, "/billetsDisponble/v1/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/billetsDisponble/v1/**").hasRole("ADMIN")
+						// Toutes les autres requêtes doivent être authentifiées
+						.anyRequest().authenticated());
 
-        // Ajout des filtres d'authentification et de token
-        http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		// Ajout des filtres d'authentification et de token
+		http.authenticationProvider(authenticationProvider());
+		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+		return http.build();
+	}
 }
